@@ -29,16 +29,16 @@ public class GuiRegister extends GuiContainer
     @Override
     public void initGui()
     {
-        item1txt = new GuiTextField(this.mc.fontRenderer, -20, 0, 24, 12);
+        item1txt = new GuiTextField(this.mc.fontRenderer, -5, 70, 24, 12);
         item1txt.setMaxStringLength(32767);
 
-        item2txt = new GuiTextField(this.mc.fontRenderer, 10, 0, 24, 12);
+        item2txt = new GuiTextField(this.mc.fontRenderer, 45, 70, 24, 12);
         item2txt.setMaxStringLength(32767);
 
-        item3txt = new GuiTextField(this.mc.fontRenderer, 40, 0, 24, 12);
+        item3txt = new GuiTextField(this.mc.fontRenderer, 95, 70, 24, 12);
         item3txt.setMaxStringLength(32767);
 
-        item4txt = new GuiTextField(this.mc.fontRenderer, 70, 0, 24, 12);
+        item4txt = new GuiTextField(this.mc.fontRenderer, 145, 70, 24, 12);
         item4txt.setMaxStringLength(32767);
         super.initGui();
     }
@@ -59,7 +59,7 @@ public class GuiRegister extends GuiContainer
     {
         FontRenderer fontRenderer = this.mc.fontRenderer;
 
-        fontRenderer.drawString("Paper", 172, -40, 4210752);
+        fontRenderer.drawString("Paper", 172, 170, 4210752);
 
         fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, 256 - 96 + 2, 4210752);
         item1txt.drawTextBox();
