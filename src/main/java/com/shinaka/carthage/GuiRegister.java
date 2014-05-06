@@ -3,6 +3,7 @@ package com.shinaka.carthage;
 import com.shinaka.carthage.blocks.TileEntityRegister;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -15,28 +16,56 @@ import org.lwjgl.opengl.GL11;
 public class GuiRegister extends GuiContainer
 {
     protected GuiTextField item1txt;
+    protected GuiTextField item2txt;
+    protected GuiTextField item3txt;
+    protected GuiTextField item4txt;
 
     public GuiRegister(InventoryPlayer inventory, TileEntityRegister te)
     {
         super(new ContainerRegister(inventory, te));
+
     }
 
     @Override
     public void initGui()
     {
-        item1txt = new GuiTextField(this.mc.fontRenderer, 2, 2, 103, 12);
+        item1txt = new GuiTextField(this.mc.fontRenderer, -20, 0, 24, 12);
+        item1txt.setMaxStringLength(32767);
+
+        item2txt = new GuiTextField(this.mc.fontRenderer, 10, 0, 24, 12);
+        item2txt.setMaxStringLength(32767);
+
+        item3txt = new GuiTextField(this.mc.fontRenderer, 40, 0, 24, 12);
+        item3txt.setMaxStringLength(32767);
+
+        item4txt = new GuiTextField(this.mc.fontRenderer, 70, 0, 24, 12);
+        item4txt.setMaxStringLength(32767);
         super.initGui();
+    }
+
+    @Override
+    protected void keyTyped(char par1, int par2)
+    {
+        if (par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.getKeyCode())
+        {
+            this.mc.thePlayer.closeScreen();
+        }
+
+        if(item1txt.isFocused())
+            item1txt.textboxKeyTyped(par1, par2);
     }
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2)
     {
         FontRenderer fontRenderer = this.mc.fontRenderer;
 
-        //draw text and stuff here
-        //the parameters for drawString are: string, x, y, color
-        fontRenderer.drawString("Paper", 8, 6, 4210752);
-        //draws "Inventory" or your regional equivalent
-        fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+        fontRenderer.drawString("Paper", 172, -40, 4210752);
+
+        fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, 256 - 96 + 2, 4210752);
+        item1txt.drawTextBox();
+        item2txt.drawTextBox();
+        item3txt.drawTextBox();
+        item4txt.drawTextBox();
     }
 
     @Override
@@ -46,8 +75,19 @@ public class GuiRegister extends GuiContainer
         ResourceLocation bg = new ResourceLocation("carthage", "textures/gui/container/register.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(bg);
-        int x = (width - xSize) / 2;
-        int y = (height - ySize) / 2;
-        this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+
+        this.drawTexturedModalRect(getGuiLeft(), getGuiTop(), 0, 0, 256, 256);
+    }
+
+    protected int getGuiLeft()
+    {
+        ScaledResolution res = new ScaledResolution( this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        return (res.getScaledWidth() - 256) / 2;
+    }
+
+    protected int getGuiTop()
+    {
+        ScaledResolution res = new ScaledResolution( this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
+        return (res.getScaledHeight() - 128) / 2;
     }
 }

@@ -41,6 +41,30 @@ public class ContainerRegister extends Container
     }
 
     @Override
+    public ItemStack slotClick(int slot, int par2, int par3, EntityPlayer player)
+    {
+        if(slot == 0 && player.inventory.getItemStack() != null)
+        {
+            ItemStack mouseItem = player.inventory.getItemStack();
+            ItemStack clonedItem = mouseItem.copy();
+            clonedItem.stackSize = 1;
+            this.getSlot(0).putStack(clonedItem);
+            player.inventory.closeInventory();
+        }
+        else if(slot == 0)
+        {
+            this.getSlot(0).putStack(null);
+            player.inventory.closeInventory();
+        }
+        else
+        {
+            return super.slotClick(slot, par2, par3, player);
+        }
+
+        return null;
+    }
+
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
         ItemStack stack = null;
         Slot slotObject = (Slot) inventorySlots.get(slot);
