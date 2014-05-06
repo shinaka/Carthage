@@ -2,14 +2,11 @@ Carthage
 ========
 A Minecraft 1.7.2 mod.
 
-Carthage adds two new blocks:
--Trading Post
---Used to set up trades between players. Uses a ledger to define what items are available for trade. Has a primary inventory
-that holds the offered item.
+Carthage adds two new blocks
 
--Register
---Consumes paper to create Ledgers. Ledgers define the value of items in a trade. If the player is looking for Coal,
-he would add it to his ledger and assign it a Credit value.
+-Trading Post: Used to set up trades between players. Uses a ledger to define what items are available for trade. Has a primary inventory that holds the offered item.
+
+-Register: Consumes paper to create Ledgers. Ledgers define the value of items in a trade. If the player is looking for Coal, he would add it to his ledger and assign it a Credit value.
 
 To trade, the player places a Trading Post and creates a Ledger with the Register. For example:
 Player A places a Trading Post. He has an abundance of coal, so he sets the Trading Post to offer his coal. He fills
