@@ -20,12 +20,12 @@ public class TileEntityRegister extends TileEntity implements IInventory
     }
     @Override
     public int getSizeInventory() {
-        return 1;
+        return 5;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        if(slot == 0)
+        if(slot == 4)
             return paperStackIn;
         return null;
     }
@@ -43,7 +43,7 @@ public class TileEntityRegister extends TileEntity implements IInventory
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
-        if(slot == 0)
+        if(slot == 4)
             paperStackIn = stack;
     }
 

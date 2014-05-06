@@ -29,16 +29,18 @@ public class GuiRegister extends GuiContainer
     @Override
     public void initGui()
     {
-        item1txt = new GuiTextField(this.mc.fontRenderer, -5, 70, 24, 12);
+        xSize = 256;
+        ySize = 256;
+        item1txt = new GuiTextField(this.mc.fontRenderer, 35, 105, 24, 12);
         item1txt.setMaxStringLength(32767);
 
-        item2txt = new GuiTextField(this.mc.fontRenderer, 45, 70, 24, 12);
+        item2txt = new GuiTextField(this.mc.fontRenderer, 85, 105, 24, 12);
         item2txt.setMaxStringLength(32767);
 
-        item3txt = new GuiTextField(this.mc.fontRenderer, 95, 70, 24, 12);
+        item3txt = new GuiTextField(this.mc.fontRenderer, 135, 105, 24, 12);
         item3txt.setMaxStringLength(32767);
 
-        item4txt = new GuiTextField(this.mc.fontRenderer, 145, 70, 24, 12);
+        item4txt = new GuiTextField(this.mc.fontRenderer, 185, 105, 24, 12);
         item4txt.setMaxStringLength(32767);
         super.initGui();
     }
@@ -59,9 +61,14 @@ public class GuiRegister extends GuiContainer
     {
         FontRenderer fontRenderer = this.mc.fontRenderer;
 
-        fontRenderer.drawString("Paper", 172, 170, 4210752);
+        fontRenderer.drawString("Paper", 208, 210, 4210752);
+        fontRenderer.drawString("Item 1", 35, 75, 4210752);
+        fontRenderer.drawString("Item 2", 85, 75, 4210752);
+        fontRenderer.drawString("Item 3", 135, 75, 4210752);
+        fontRenderer.drawString("Item 4", 185, 75, 4210752);
 
-        fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, 256 - 96 + 2, 4210752);
+
+        fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 10, 133, 4210752);
         item1txt.drawTextBox();
         item2txt.drawTextBox();
         item3txt.drawTextBox();

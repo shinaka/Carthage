@@ -17,8 +17,15 @@ public class ContainerRegister extends Container
     public ContainerRegister(InventoryPlayer inventoryPlayer, TileEntityRegister te)
     {
         teRegister = te;
-        //Slot 0: Paper Holder
-        addSlotToContainer(new Slot(te, 0, 62, 62));
+
+        addSlotToContainer(new Slot(te, 0, 39, 85));
+        addSlotToContainer(new Slot(te, 1, 89, 85));
+        addSlotToContainer(new Slot(te, 2, 139, 85));
+        addSlotToContainer(new Slot(te, 3, 189, 85));
+
+        //Slot 4: Paper Holder
+        addSlotToContainer(new Slot(te, 4, 214, 190));
+
         bindPlayerInventory(inventoryPlayer);
     }
 
@@ -31,12 +38,12 @@ public class ContainerRegister extends Container
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
-                        8 + j * 18, 84 + i * 18));
+                        10 + j * 18, 145 + i * 18));
             }
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+            addSlotToContainer(new Slot(inventoryPlayer, i, 10 + i * 18, 200));
         }
     }
 
@@ -50,6 +57,7 @@ public class ContainerRegister extends Container
             clonedItem.stackSize = 1;
             this.getSlot(0).putStack(clonedItem);
             player.inventory.closeInventory();
+            return clonedItem;
         }
         else if(slot == 0)
         {
