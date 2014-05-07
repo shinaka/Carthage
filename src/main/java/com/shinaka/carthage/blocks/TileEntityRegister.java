@@ -10,8 +10,11 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileEntityRegister extends TileEntity implements IInventory
 {
-    private ItemStack paperStackIn;
-    private ItemStack paperStackOut;
+    private ItemStack slot1;
+    private ItemStack slot2;
+    private ItemStack slot3;
+    private ItemStack slot4;
+    private ItemStack paperStack;
     private ItemStack[] registerSlots;
 
     public TileEntityRegister()
@@ -25,8 +28,19 @@ public class TileEntityRegister extends TileEntity implements IInventory
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        if(slot == 4)
-            return paperStackIn;
+        switch(slot)
+        {
+            case 0:
+                return slot1;
+            case 1:
+                return slot2;
+            case 2:
+                return slot3;
+            case 3:
+                return slot4;
+            case 4:
+                return paperStack;
+        }
         return null;
     }
 
@@ -43,8 +57,24 @@ public class TileEntityRegister extends TileEntity implements IInventory
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
-        if(slot == 4)
-            paperStackIn = stack;
+        switch(slot)
+        {
+            case 0:
+                slot1 = stack;
+                break;
+            case 1:
+                slot2 = stack;
+                break;
+            case 2:
+                slot3 = stack;
+                break;
+            case 3:
+                slot4 = stack;
+                break;
+            case 4:
+                paperStack = stack;
+                break;
+        }
     }
 
     @Override
