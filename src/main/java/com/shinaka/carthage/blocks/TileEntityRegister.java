@@ -45,7 +45,23 @@ public class TileEntityRegister extends TileEntity implements IInventory
     }
 
     @Override
-    public ItemStack decrStackSize(int var1, int var2) {
+    public ItemStack decrStackSize(int slot, int quantity)
+    {
+        if(slot == 4 && paperStack != null)
+        {
+            ItemStack stack = paperStack.copy();
+            stack.stackSize = quantity;
+
+            if(paperStack.stackSize - quantity > 0)
+            {
+                paperStack.stackSize = paperStack.stackSize - quantity;
+            }
+            else
+            {
+                paperStack = null;
+            }
+            return stack;
+        }
         return null;
     }
 
@@ -88,8 +104,9 @@ public class TileEntityRegister extends TileEntity implements IInventory
     }
 
     @Override
-    public int getInventoryStackLimit() {
-        return 1;
+    public int getInventoryStackLimit()
+    {
+        return 64;
     }
 
     @Override

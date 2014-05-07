@@ -3,6 +3,7 @@ package com.shinaka.carthage;
 import com.shinaka.carthage.blocks.TileEntityRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -71,6 +72,19 @@ public class ContainerRegister extends Container
                     player.inventory.closeInventory();
                 }
                 break;
+            case 4:
+                if(player.inventory.getItemStack() != null && player.inventory.getItemStack().getItem() == Items.paper)
+                {
+                    return super.slotClick(slot, par2, par3, player);
+                }
+                else if(player.inventory.getItemStack() == null)
+                {
+                    return super.slotClick(slot, par2, par3, player);
+                }
+                else
+                {
+                    return null;
+                }
             default:
                 return super.slotClick(slot, par2, par3, player);
         }
@@ -79,7 +93,8 @@ public class ContainerRegister extends Container
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+    public ItemStack transferStackInSlot(EntityPlayer player, int slot)
+    {
         ItemStack stack = null;
         Slot slotObject = (Slot) inventorySlots.get(slot);
 
