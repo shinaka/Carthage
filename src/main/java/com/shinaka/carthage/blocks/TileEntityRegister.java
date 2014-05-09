@@ -1,5 +1,7 @@
 package com.shinaka.carthage.blocks;
 
+import com.shinaka.carthage.Carthage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,16 +12,29 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityRegister extends TileEntity implements IInventory
 {
     private ItemStack slot1;
+    public int slot1cost = 100;
+
     private ItemStack slot2;
+    public int slot2cost = 100;
+
     private ItemStack slot3;
+    public int slot3cost = 100;
+
     private ItemStack slot4;
+    public int slot4cost = 100;
+
     private ItemStack paperStack;
+    private ItemStack ledgerSlot;
 
     public TileEntityRegister()
     {
-
+        ledgerSlot = new ItemStack(Carthage.itemLedger);
     }
 
+    public boolean CanCreateLedger()
+    {
+        return paperStack != null && paperStack.stackSize > 0 && ((slot1 != null) || (slot2 != null) || (slot3 != null) || (slot4 != null));
+    }
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
@@ -107,7 +122,7 @@ public class TileEntityRegister extends TileEntity implements IInventory
 
     @Override
     public int getSizeInventory() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -124,6 +139,10 @@ public class TileEntityRegister extends TileEntity implements IInventory
                 return slot4;
             case 4:
                 return paperStack;
+            case 5:
+                if(paperStack == null)
+                    return null;
+                return ledgerSlot;
         }
         return null;
     }
@@ -145,6 +164,10 @@ public class TileEntityRegister extends TileEntity implements IInventory
                 paperStack = null;
             }
             return stack;
+        }
+        if(slot == 5)
+        {
+            Minecraft.getMinecraft().thePlayer.sendChatMessage("Out Slot");
         }
         return null;
     }
@@ -173,6 +196,8 @@ public class TileEntityRegister extends TileEntity implements IInventory
                 break;
             case 4:
                 paperStack = stack;
+                break;
+            case 5:
                 break;
         }
     }

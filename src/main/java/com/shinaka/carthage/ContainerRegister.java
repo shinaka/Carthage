@@ -7,6 +7,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 /**
  * Created by James on 5/3/2014.
@@ -26,6 +28,9 @@ public class ContainerRegister extends Container
 
         //Slot 4: Paper Holder
         addSlotToContainer(new Slot(te, 4, 214, 190));
+
+        //Slot 5: Ledger Holder
+        addSlotToContainer(new Slot(te, 5, 214, 152));
 
         bindPlayerInventory(inventoryPlayer);
     }
@@ -85,6 +90,16 @@ public class ContainerRegister extends Container
                 {
                     return null;
                 }
+            case 5:
+                if(player.inventory.getItemStack() == null)
+                {
+                    ItemStack ledger = CreateLedger();
+                    if(ledger != null)
+                    {
+                        player.inventory.setItemStack(ledger);
+                    }
+                }
+                break;
             default:
                 return super.slotClick(slot, par2, par3, player);
         }
@@ -92,6 +107,67 @@ public class ContainerRegister extends Container
         return null;
     }
 
+    public ItemStack CreateLedger()
+    {
+        if(teRegister.CanCreateLedger())
+        {
+            ItemStack ledger = new ItemStack(Carthage.itemLedger);
+            NBTTagCompound tagCompound = new NBTTagCompound();
+            NBTTagList itemList = new NBTTagList();
+            //Slot 0
+            ItemStack slot0Stack = ((Slot)this.inventorySlots.get(0)).getStack();
+            if(slot0Stack != null)
+            {
+                NBTTagCompound slotTag = new NBTTagCompound();
+                slotTag.setByte("Slot", (byte) 0);
+                slotTag.setInteger("cost", teRegister.slot1cost);
+                slot0Stack.writeToNBT(slotTag);
+                itemList.appendTag(slotTag);
+            }
+
+            //Slot 1
+            ItemStack slot1Stack = ((Slot)this.inventorySlots.get(1)).getStack();
+            if(slot1Stack != null)
+            {
+                NBTTagCompound slotTag = new NBTTagCompound();
+                slotTag.setByte("Slot", (byte) 1);
+                slotTag.setInteger("cost", teRegister.slot1cost);
+                slot1Stack.writeToNBT(slotTag);
+                itemList.appendTag(slotTag);
+            }
+
+            //Slot 2
+            ItemStack slot2Stack = ((Slot)this.inventorySlots.get(2)).getStack();
+            if(slot2Stack != null)
+            {
+                NBTTagCompound slotTag = new NBTTagCompound();
+                slotTag.setByte("Slot", (byte) 2);
+                slotTag.setInteger("cost", teRegister.slot1cost);
+                slot2Stack.writeToNBT(slotTag);
+                itemList.appendTag(slotTag);
+            }
+
+            //Slot 3
+            ItemStack slot3Stack = ((Slot)this.inventorySlots.get(3)).getStack();
+            if(slot3Stack != null)
+            {
+                NBTTagCompound slotTag = new NBTTagCompound();
+                slotTag.setByte("Slot", (byte) 3);
+                slotTag.setInteger("cost", teRegister.slot1cost);
+                slot3Stack.writeToNBT(slotTag);
+                itemList.appendTag(slotTag);
+            }
+
+            tagCompound.setTag("Ledger", itemList);
+            ledger.stackTagCompound = tagCompound;
+
+            //Reduce the Paper Stack
+            ((Slot)this.inventorySlots.get(4)).decrStackSize(1);
+
+            return ledger;
+        }
+        return null;
+    }
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot)
     {

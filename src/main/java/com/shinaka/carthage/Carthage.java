@@ -5,6 +5,7 @@ import com.shinaka.carthage.blocks.TileEntityRegisterBlock;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
 import com.shinaka.carthage.blocks.TileEntityTradingPostBlock;
 import com.shinaka.carthage.client.TileEntityTradingPostRenderer;
+import com.shinaka.carthage.items.ItemLedger;
 import com.shinaka.carthage.items.TradingPostItemBlock;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.SidedProxy;
@@ -14,6 +15,7 @@ import net.minecraft.block.Block;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import net.minecraft.item.Item;
 
 @Mod(modid = Carthage.MODID, version = Carthage.VERSION)
 public class Carthage {
@@ -22,6 +24,7 @@ public class Carthage {
     public static Carthage INSTANCE;
     public static Block tradingPostBlock;
     public static Block registerBlock;
+    public static Item itemLedger;
 
     @SidedProxy(clientSide = "com.shinaka.carthage.client.ClientProxy", serverSide = "com.shinaka.CommonProxy")
     public static CommonProxy proxy;
@@ -39,6 +42,9 @@ public class Carthage {
         registerBlock = new TileEntityRegisterBlock();
         GameRegistry.registerTileEntity(TileEntityRegister.class, "tileEntityRegister");
         GameRegistry.registerBlock(registerBlock, "Register");
+
+        itemLedger = new ItemLedger();
+        GameRegistry.registerItem(itemLedger, "Ledger");
         proxy.registerRecipes();
     }
 }
