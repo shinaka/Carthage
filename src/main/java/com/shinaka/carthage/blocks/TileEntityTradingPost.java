@@ -18,6 +18,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     protected ItemStack[] inventory;
     protected ItemStack tradedItem;
     protected String blockOwner;
+    protected ItemStack ledgerStack;
 
     public TileEntityTradingPost()
     {
@@ -60,11 +61,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     }
 
     @Override
-    public ItemStack getStackInSlot(int idx) {
-        if(idx >=0 && idx < inventory.length)
-        {
-            return inventory[idx];
-        }
+    public ItemStack getStackInSlot(int idx)
+    {
+
 
         return null;
     }
