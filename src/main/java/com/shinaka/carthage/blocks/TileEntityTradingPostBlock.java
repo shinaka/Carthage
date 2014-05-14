@@ -127,6 +127,19 @@ public class TileEntityTradingPostBlock extends BlockContainer
     }
 
     @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par1, float par2, float par3, float par4)
+    {
+        player.openGui(Carthage.INSTANCE, GetGuiType((TileEntityTradingPost)world.getTileEntity(x,y,z), player), world, x,y,z);
+        return true;
+    }
+
+    int GetGuiType(TileEntityTradingPost te, EntityPlayer player)
+    {
+        if(te.getBlockOwner().equalsIgnoreCase(player.getDisplayName()))
+            return 1;
+        return 2;
+    }
+    @Override
     public String getUnlocalizedName()
     {
         return "Trading Post";

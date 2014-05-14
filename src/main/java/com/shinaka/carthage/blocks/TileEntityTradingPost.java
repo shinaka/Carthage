@@ -54,6 +54,10 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         writeToNBT(tagCompound);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tagCompound);
     }
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+        readFromNBT(packet.func_148857_g());
+    }
 
     @Override
     public int getSizeInventory() {
@@ -101,7 +105,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     @Override
     public boolean isUseableByPlayer(EntityPlayer player)
     {
-        return player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
+        return true;
     }
 
     @Override

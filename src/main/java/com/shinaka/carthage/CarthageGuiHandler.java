@@ -39,17 +39,22 @@ public class CarthageGuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
         TileEntity te = world.getTileEntity(x,y,z);
-        if(te != null && te instanceof TileEntityRegister)
+        if(ID == 0)
         {
-            return new GuiRegister(player.inventory, (TileEntityRegister)te);
+            if(te != null && te instanceof TileEntityRegister)
+            {
+                return new GuiRegister(player.inventory, (TileEntityRegister)te);
+            }
         }
-        else if(te != null && te instanceof TileEntityTradingPost)
+        else if(ID == 1)
         {
             TileEntityTradingPost teTpost = (TileEntityTradingPost) te;
-            if (IsTradingPostOwner(player, teTpost))
-                return new GuiTradingPostOwner(player.inventory, teTpost);
-            else
-                return new GuiTradingPostUser(player.inventory, teTpost);
+            return new GuiTradingPostOwner(player.inventory, teTpost);
+        }
+        else if(ID == 2)
+        {
+            TileEntityTradingPost teTpost = (TileEntityTradingPost) te;
+            return new GuiTradingPostUser(player.inventory, teTpost);
         }
         return null;
     }
