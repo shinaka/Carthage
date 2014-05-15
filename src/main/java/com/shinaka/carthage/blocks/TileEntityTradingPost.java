@@ -67,9 +67,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     @Override
     public ItemStack getStackInSlot(int idx)
     {
-
-
-        return null;
+        return inventory[idx];
     }
 
     @Override
