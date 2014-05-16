@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 public class ContainerTradingPostOwner extends Container {
     TileEntityTradingPost te;
 
-    public ContainerTradingPostOwner(InventoryPlayer inventory, TileEntityTradingPost te)
+    public ContainerTradingPostOwner(InventoryPlayer inventoryPlayer, TileEntityTradingPost te)
     {
         this.te = te;
 
@@ -35,7 +35,7 @@ public class ContainerTradingPostOwner extends Container {
         //For Sale
         addSlotToContainer(new Slot(te, 9, 79, 61));
 
-        bindPlayerInventory(inventory);
+        bindPlayerInventory(inventoryPlayer);
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)

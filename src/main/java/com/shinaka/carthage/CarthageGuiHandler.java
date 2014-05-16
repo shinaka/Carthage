@@ -32,7 +32,7 @@ public class CarthageGuiHandler implements IGuiHandler {
 
     public boolean IsTradingPostOwner(EntityPlayer player, TileEntityTradingPost tpost)
     {
-        return tpost.getBlockOwner() == player.getDisplayName();
+        return tpost.getBlockOwner().equals(player.getDisplayName());
     }
 
     @Override
