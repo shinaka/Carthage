@@ -17,13 +17,19 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityTradingPost extends TileEntity implements IInventory
 {
     protected ItemStack[] inventory;
+    protected ItemStack[] received;
+
     protected ItemStack tradedItem;
     protected String blockOwner;
     protected ItemStack ledgerStack;
 
+    protected final int ledgerSlot = 16;
+    protected final int tradedItemSlot = 17;
+
     public TileEntityTradingPost()
     {
         inventory = new ItemStack[8];
+        received = new ItemStack[8];
     }
 
     public void setBlockOwner(String owner)
@@ -49,13 +55,17 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             {
                 if( slot < 8)
                     inventory[i] = ItemStack.loadItemStackFromNBT(tag);
+                else if(slot < 16)
+                {
+                    received[i - inventory.length] = ItemStack.loadItemStackFromNBT(tag);
+                }
                 else
                 {
-                    if(slot == 8)
+                    if(slot == ledgerSlot)
                     {
                         ledgerStack = ItemStack.loadItemStackFromNBT(tag);
                     }
-                    else if(slot == 9)
+                    else if(slot == tradedItemSlot)
                     {
                         tradedItem = ItemStack.loadItemStackFromNBT(tag);
                     }
@@ -84,10 +94,21 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             itemList.appendTag(tag);
         }
 
+        for(int i = 0; i < received.length; ++i)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            ItemStack slot = received[i];
+            if(slot == null)
+                continue;
+            tag.setByte("Slot", (byte) (i + inventory.length));
+            slot.writeToNBT(tag);
+            itemList.appendTag(tag);
+        }
+
         if(ledgerStack != null)
         {
             NBTTagCompound ledgerTag = new NBTTagCompound();
-            ledgerTag.setByte("Slot", (byte) 8);
+            ledgerTag.setByte("Slot", (byte) ledgerSlot);
             ledgerStack.writeToNBT(ledgerTag);
             itemList.appendTag(ledgerTag);
         }
@@ -95,7 +116,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         if(tradedItem != null)
         {
             NBTTagCompound tradedTag = new NBTTagCompound();
-            tradedTag.setByte("Slot", (byte) 9);
+            tradedTag.setByte("Slot", (byte) tradedItemSlot);
             tradedItem.writeToNBT(tradedTag);
             itemList.appendTag(tradedTag);
         }
@@ -116,7 +137,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 
     @Override
     public int getSizeInventory() {
-        return inventory.length + 2;
+        return inventory.length + received.length + 2;
     }
 
     @Override
@@ -124,7 +145,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     {
         if(idx < 8)
             return inventory[idx];
-        else if(idx == 8)
+        else if(idx < 16)
+            return received[idx - inventory.length];
+        else if(idx == ledgerSlot)
             return ledgerStack;
         else
             return tradedItem;
@@ -141,8 +164,16 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     }
 
     @Override
-    public void setInventorySlotContents(int var1, ItemStack var2) {
-
+    public void setInventorySlotContents(int idx, ItemStack var2)
+    {
+        if(idx < 8)
+            inventory[idx] = var2;
+        else if(idx < 16)
+            received[idx - inventory.length] = var2;
+        else if(idx == ledgerSlot)
+            ledgerStack = var2;
+        else
+            tradedItem = var2;
     }
 
     @Override

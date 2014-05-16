@@ -36,7 +36,7 @@ public class GuiTradingPostOwner extends GuiContainer
         this.mc.renderEngine.bindTexture(bg);
 
         this.drawTexturedModalRect(getGuiLeft(), getGuiTop(), 0, 0, 256, 256);
-        this.drawItemSlot(16, 16, 152, 63);
+
 
         //Draw internal inventories
         this.drawItemSlot(16, 16, 8, 63);
@@ -48,14 +48,29 @@ public class GuiTradingPostOwner extends GuiContainer
         this.drawItemSlot(16, 16, 42, 46);
         this.drawItemSlot(16, 16, 59, 46);
 
+        this.drawItemSlot(16, 16, 101, 63);
+        this.drawItemSlot(16, 16, 118, 63);
+        this.drawItemSlot(16, 16, 135, 63);
+        this.drawItemSlot(16, 16, 152, 63);
+        this.drawItemSlot(16, 16, 101, 46);
+        this.drawItemSlot(16, 16, 118, 46);
+        this.drawItemSlot(16, 16, 135, 46);
+        this.drawItemSlot(16, 16, 152, 46);
+
         //Draw for sale slot
-        this.drawItemSlot(16, 16, 77, 16);
+        this.drawItemSlot(16, 16, 33, 16);
+
+        this.drawItemSlot(16, 16, 126, 16);
+
+
 
         FontRenderer fontRenderer = this.mc.fontRenderer;
 
         fontRenderer.drawString("Stock", getGuiLeft() + 8, getGuiTop() + 35, 4210752);
-        fontRenderer.drawString("Ledger", getGuiLeft() + 115, getGuiTop() + 67, 4210752);
-        fontRenderer.drawString("For Sale", getGuiLeft() + 64, getGuiTop() + 5, 4210752);
+        fontRenderer.drawString("Received", getGuiLeft() + 101, getGuiTop() + 35, 4210752);
+
+        fontRenderer.drawString("Ledger", getGuiLeft() + 117, getGuiTop() + 5, 4210752);
+        fontRenderer.drawString("For Sale", getGuiLeft() + 20, getGuiTop() + 5, 4210752);
     }
 
     @Override

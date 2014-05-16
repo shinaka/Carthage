@@ -29,11 +29,22 @@ public class ContainerTradingPostOwner extends Container {
         addSlotToContainer(new Slot(te, 6, 44, 108));
         addSlotToContainer(new Slot(te, 7, 61, 108));
 
+        //Received Row 1
+        addSlotToContainer(new Slot(te, 8, 103, 91));
+        addSlotToContainer(new Slot(te, 9, 120, 91));
+        addSlotToContainer(new Slot(te, 10, 137, 91));
+        addSlotToContainer(new Slot(te, 11, 154, 91));
+        //Received Row 2
+        addSlotToContainer(new Slot(te, 12, 103, 108));
+        addSlotToContainer(new Slot(te, 13, 120, 108));
+        addSlotToContainer(new Slot(te, 14, 137, 108));
+        addSlotToContainer(new Slot(te, 15, 154, 108));
+
         //Ledger
-        addSlotToContainer(new Slot(te, 8, 154, 108));
+        addSlotToContainer(new Slot(te, 16, 128, 61));
 
         //For Sale
-        addSlotToContainer(new Slot(te, 9, 79, 61));
+        addSlotToContainer(new Slot(te, 17, 35, 61));
 
         bindPlayerInventory(inventoryPlayer);
     }
