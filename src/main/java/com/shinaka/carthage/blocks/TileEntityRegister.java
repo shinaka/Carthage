@@ -26,6 +26,11 @@ public class TileEntityRegister extends TileEntity implements IInventory
     private ItemStack paperStack;
     private ItemStack ledgerSlot;
 
+    public static final int slot1idx = 0;
+    public static final int slot2idx = 1;
+    public static final int slot3idx = 2;
+    public static final int slot4idx = 3;
+
     public TileEntityRegister()
     {
         ledgerSlot = new ItemStack(Carthage.itemLedger);

@@ -1,5 +1,7 @@
 package com.shinaka.carthage.blocks;
 
+import com.shinaka.carthage.Carthage;
+import com.shinaka.carthage.LedgerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -10,6 +12,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.ArrayList;
 
 /**
  * Created by James on 4/28/2014.
@@ -23,8 +27,12 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     protected String blockOwner;
     protected ItemStack ledgerStack;
 
-    protected final int ledgerSlot = 16;
-    protected final int tradedItemSlot = 17;
+    public static final int ledgerSlotIdx = 16;
+    public static final int tradedItemSlotIdx = 17;
+
+    protected Boolean bHasLedger = false;
+
+    protected ArrayList<LedgerData> ledgerData;
 
     public TileEntityTradingPost()
     {
@@ -61,11 +69,15 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                 }
                 else
                 {
-                    if(slot == ledgerSlot)
+                    if(slot == ledgerSlotIdx)
                     {
                         ledgerStack = ItemStack.loadItemStackFromNBT(tag);
+                        if(ledgerStack != null && ledgerStack.getItem() != null && ledgerStack.getItem() == Carthage.itemLedger)
+                            SetHasLedger(true);
+                        else
+                            SetHasLedger(false);
                     }
-                    else if(slot == tradedItemSlot)
+                    else if(slot == tradedItemSlotIdx)
                     {
                         tradedItem = ItemStack.loadItemStackFromNBT(tag);
                     }
@@ -108,7 +120,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         if(ledgerStack != null)
         {
             NBTTagCompound ledgerTag = new NBTTagCompound();
-            ledgerTag.setByte("Slot", (byte) ledgerSlot);
+            ledgerTag.setByte("Slot", (byte) ledgerSlotIdx);
             ledgerStack.writeToNBT(ledgerTag);
             itemList.appendTag(ledgerTag);
         }
@@ -116,7 +128,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         if(tradedItem != null)
         {
             NBTTagCompound tradedTag = new NBTTagCompound();
-            tradedTag.setByte("Slot", (byte) tradedItemSlot);
+            tradedTag.setByte("Slot", (byte) tradedItemSlotIdx);
             tradedItem.writeToNBT(tradedTag);
             itemList.appendTag(tradedTag);
         }
@@ -147,14 +159,48 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             return inventory[idx];
         else if(idx < 16)
             return received[idx - inventory.length];
-        else if(idx == ledgerSlot)
+        else if(idx == ledgerSlotIdx)
             return ledgerStack;
         else
             return tradedItem;
     }
 
     @Override
-    public ItemStack decrStackSize(int var1, int var2) {
+    public ItemStack decrStackSize(int slot, int quantity)
+    {
+        ItemStack stack;
+        if(slot < 8)
+            stack = inventory[slot];
+        else if(slot < 16)
+            stack =  received[slot - inventory.length];
+        else if(slot == ledgerSlotIdx)
+            stack = ledgerStack;
+        else
+            stack = tradedItem;
+
+        if(stack != null)
+        {
+            ItemStack returnStack = stack.copy();
+            returnStack.stackSize = quantity;
+
+            if(stack.stackSize - quantity > 0)
+            {
+                stack.stackSize = stack.stackSize - quantity;
+            }
+            else
+            {
+                if(slot < 8)
+                    inventory[slot] = null;
+                else if(slot < 16)
+                    received[slot - inventory.length] = null;
+                else if(slot == ledgerSlotIdx)
+                    ledgerStack = null;
+                else
+                    tradedItem = null;
+            }
+            return returnStack;
+        }
+
         return null;
     }
 
@@ -170,8 +216,14 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             inventory[idx] = var2;
         else if(idx < 16)
             received[idx - inventory.length] = var2;
-        else if(idx == ledgerSlot)
+        else if(idx == ledgerSlotIdx)
+        {
             ledgerStack = var2;
+            if(var2 == null)
+                SetHasLedger(false);
+            else
+                SetHasLedger(true);
+        }
         else
             tradedItem = var2;
     }
@@ -210,5 +262,47 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     @Override
     public boolean isItemValidForSlot(int var1, ItemStack var2) {
         return false;
+    }
+
+    public void SetHasLedger(boolean b)
+    {
+        bHasLedger = b;
+        if(b == true)
+            InitLedgerItems();
+    }
+
+    public void InitLedgerItems()
+    {
+        ArrayList<LedgerData> ledgerItems = new ArrayList<LedgerData>();
+        if(bHasLedger && ledgerStack != null)
+        {
+            NBTTagCompound tagCompound = ledgerStack.getTagCompound();
+            if(tagCompound != null)
+            {
+                NBTTagList itemList = tagCompound.getTagList("Ledger", 10);
+                if(itemList != null)
+                {
+                    for(int i = 0; i < itemList.tagCount(); ++i)
+                    {
+                        NBTTagCompound slotTag = itemList.getCompoundTagAt(i);
+                        if(slotTag != null)
+                        {
+                            int slot = slotTag.getByte("Slot");
+                            ItemStack stack = ItemStack.loadItemStackFromNBT(slotTag);
+                            int cost = slotTag.getByte("cost");
+                            LedgerData ledger = new LedgerData(stack.getItem(), slot, cost);
+                            ledgerItems.add(ledger);
+                        }
+                    }
+
+                    ledgerData = ledgerItems;
+                }
+            }
+        }
+    }
+
+    public ArrayList<LedgerData> GetLedgerData()
+    {
+        return ledgerData;
     }
 }

@@ -3,7 +3,6 @@ package com.shinaka.carthage;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -41,10 +40,10 @@ public class ContainerTradingPostOwner extends Container {
         addSlotToContainer(new Slot(te, 15, 154, 108));
 
         //Ledger
-        addSlotToContainer(new Slot(te, 16, 128, 61));
+        addSlotToContainer(new Slot(te, TileEntityTradingPost.ledgerSlotIdx, 128, 61));
 
         //For Sale
-        addSlotToContainer(new Slot(te, 17, 35, 61));
+        addSlotToContainer(new Slot(te, TileEntityTradingPost.tradedItemSlotIdx, 35, 61));
 
         bindPlayerInventory(inventoryPlayer);
     }
@@ -68,11 +67,57 @@ public class ContainerTradingPostOwner extends Container {
     {
         switch(slot)
         {
+            case TileEntityTradingPost.ledgerSlotIdx:
+            {
+                if(player.inventory.getItemStack() != null &&
+                        player.inventory.getItemStack().getItem() == Carthage.itemLedger)
+                {
+                    //te.SetHasLedger(true);
+                    return super.slotClick(slot, par2, par3, player);
+                }
+                else if(player.inventory.getItemStack() == null)
+                {
+                    //te.SetHasLedger(false);
+                    //this.getSlot(TileEntityTradingPost.ledgerSlotIdx)
+                    return super.slotClick(slot, par2, par3, player);
+                }
+                else
+                {
+                    return null;
+                }
 
-            default:
-                return super.slotClick(slot, par2, par3, player);
+            }
+            case TileEntityTradingPost.tradedItemSlotIdx:
+            {
+                if(player.inventory.getItemStack() != null)
+                {
+                    ItemStack mouseItem = player.inventory.getItemStack();
+                    ItemStack clonedItem = mouseItem.copy();
+                    clonedItem.stackSize = 1;
+                    this.getSlot(slot).putStack(clonedItem);
+                    player.inventory.closeInventory();
+                    return clonedItem;
+                }
+                else
+                {
+                    this.getSlot(slot).putStack(null);
+                    player.inventory.closeInventory();
+                }
+            }
+            break;
+
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                if(player.inventory.getItemStack() != null)
+                    return null;
         }
-
+        return super.slotClick(slot, par2, par3, player);
     }
 
     @Override

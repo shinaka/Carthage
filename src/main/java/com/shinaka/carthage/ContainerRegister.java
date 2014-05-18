@@ -6,9 +6,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.util.ArrayList;
 
 /**
  * Created by James on 5/3/2014.
@@ -21,10 +24,10 @@ public class ContainerRegister extends Container
     {
         teRegister = te;
 
-        addSlotToContainer(new Slot(te, 0, 39, 85));
-        addSlotToContainer(new Slot(te, 1, 89, 85));
-        addSlotToContainer(new Slot(te, 2, 139, 85));
-        addSlotToContainer(new Slot(te, 3, 189, 85));
+        addSlotToContainer(new Slot(te, TileEntityRegister.slot1idx, 39, 85));
+        addSlotToContainer(new Slot(te, TileEntityRegister.slot2idx, 89, 85));
+        addSlotToContainer(new Slot(te, TileEntityRegister.slot3idx, 139, 85));
+        addSlotToContainer(new Slot(te, TileEntityRegister.slot4idx, 189, 85));
 
         //Slot 4: Paper Holder
         addSlotToContainer(new Slot(te, 4, 214, 190));
@@ -58,11 +61,11 @@ public class ContainerRegister extends Container
     {
         switch(slot)
         {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                if(player.inventory.getItemStack() != null)
+            case TileEntityRegister.slot1idx:
+            case TileEntityRegister.slot2idx:
+            case TileEntityRegister.slot3idx:
+            case TileEntityRegister.slot4idx:
+                if(player.inventory.getItemStack() != null && IsItemStackUnused(player.inventory.getItemStack().getItem()))
                 {
                     ItemStack mouseItem = player.inventory.getItemStack();
                     ItemStack clonedItem = mouseItem.copy();
@@ -107,6 +110,26 @@ public class ContainerRegister extends Container
         return null;
     }
 
+    private boolean IsItemStackUnused(Item testItem)
+    {
+        //Item testItem = getSlot(slot).getStack().getItem();
+        ArrayList<Item> itemList = AddSlotsToArrayList();
+        if(itemList.contains(testItem))
+            return false;
+        return true;
+    }
+
+    private ArrayList<Item> AddSlotsToArrayList()
+    {
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        for(int slot = 0; slot < 4; slot++)
+        {
+            if (getSlot(slot).getStack() != null && getSlot(slot).getStack().getItem() != null)
+                itemList.add(getSlot(slot).getStack().getItem());
+        }
+        return itemList;
+    }
+
     public ItemStack CreateLedger()
     {
         if(teRegister.CanCreateLedger())
@@ -120,7 +143,7 @@ public class ContainerRegister extends Container
             {
                 NBTTagCompound slotTag = new NBTTagCompound();
                 slotTag.setByte("Slot", (byte) 0);
-                slotTag.setInteger("cost", teRegister.slot1cost);
+                slotTag.setByte("cost", (byte) teRegister.slot1cost);
                 slot0Stack.writeToNBT(slotTag);
                 itemList.appendTag(slotTag);
             }
@@ -131,7 +154,7 @@ public class ContainerRegister extends Container
             {
                 NBTTagCompound slotTag = new NBTTagCompound();
                 slotTag.setByte("Slot", (byte) 1);
-                slotTag.setInteger("cost", teRegister.slot1cost);
+                slotTag.setByte("cost", (byte) teRegister.slot2cost);
                 slot1Stack.writeToNBT(slotTag);
                 itemList.appendTag(slotTag);
             }
@@ -142,7 +165,7 @@ public class ContainerRegister extends Container
             {
                 NBTTagCompound slotTag = new NBTTagCompound();
                 slotTag.setByte("Slot", (byte) 2);
-                slotTag.setInteger("cost", teRegister.slot1cost);
+                slotTag.setByte("cost", (byte) teRegister.slot3cost);
                 slot2Stack.writeToNBT(slotTag);
                 itemList.appendTag(slotTag);
             }
@@ -153,7 +176,7 @@ public class ContainerRegister extends Container
             {
                 NBTTagCompound slotTag = new NBTTagCompound();
                 slotTag.setByte("Slot", (byte) 3);
-                slotTag.setInteger("cost", teRegister.slot1cost);
+                slotTag.setByte("cost", (byte) teRegister.slot4cost);
                 slot3Stack.writeToNBT(slotTag);
                 itemList.appendTag(slotTag);
             }
