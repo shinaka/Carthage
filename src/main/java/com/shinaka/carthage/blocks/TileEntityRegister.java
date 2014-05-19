@@ -100,7 +100,7 @@ public class TileEntityRegister extends TileEntity implements IInventory
         }
 
         if(theSlot == null)
-            return null;
+            return tag;
 
         tag.setByte("Slot", (byte) slot);
         theSlot.writeToNBT(tag);
