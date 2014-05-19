@@ -7,8 +7,11 @@ import com.shinaka.carthage.blocks.TileEntityTradingPostBlock;
 import com.shinaka.carthage.client.TileEntityTradingPostRenderer;
 import com.shinaka.carthage.items.ItemLedger;
 import com.shinaka.carthage.items.TradingPostItemBlock;
+import com.shinaka.carthage.network.PacketPipeline;
+import com.shinaka.carthage.network.RegisterLedgerPacket;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -21,6 +24,7 @@ import net.minecraft.item.Item;
 public class Carthage {
     public static final String MODID = "carthage";
     public static final String VERSION = "1.0";
+    public static final PacketPipeline packetPipeline = new PacketPipeline();
     public static Carthage INSTANCE;
     public static Block tradingPostBlock;
     public static Block registerBlock;
@@ -46,5 +50,13 @@ public class Carthage {
         itemLedger = new ItemLedger();
         GameRegistry.registerItem(itemLedger, "Ledger");
         proxy.registerRecipes();
+        packetPipeline.initialise();
+        packetPipeline.registerPacket(RegisterLedgerPacket.class);
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        packetPipeline.postInitialise();
     }
 }

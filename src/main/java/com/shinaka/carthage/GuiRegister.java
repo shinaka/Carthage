@@ -1,6 +1,9 @@
 package com.shinaka.carthage;
 
 import com.shinaka.carthage.blocks.TileEntityRegister;
+import com.shinaka.carthage.network.RegisterLedgerPacket;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -156,6 +159,7 @@ public class GuiRegister extends GuiContainer
             teRegister.slot3cost = Integer.parseInt(item3txt.getText());
         if(item4txt.getText().length() > 0)
             teRegister.slot4cost = Integer.parseInt(item4txt.getText());
+        sendServerPacket();
     }
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2)
@@ -197,5 +201,12 @@ public class GuiRegister extends GuiContainer
     {
         ScaledResolution res = new ScaledResolution( this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         return (res.getScaledHeight() - 128) / 2;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void sendServerPacket()
+    {
+        RegisterLedgerPacket packet = new RegisterLedgerPacket(teRegister.xCoord, teRegister.yCoord, teRegister.zCoord, item1txt.getText(), item2txt.getText(), item3txt.getText(), item4txt.getText());
+        Carthage.packetPipeline.sendToServer(packet);
     }
 }

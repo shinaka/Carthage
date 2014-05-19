@@ -1,6 +1,8 @@
 package com.shinaka.carthage.blocks;
 
 import com.shinaka.carthage.Carthage;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -241,5 +243,13 @@ public class TileEntityRegister extends TileEntity implements IInventory
     @Override
     public boolean isItemValidForSlot(int var1, ItemStack var2) {
         return false;
+    }
+
+    public void setTextValues(String text1, String text2, String text3, String text4)
+    {
+        slot1cost = Integer.parseInt(text1);
+        slot2cost = Integer.parseInt(text2);
+        slot3cost = Integer.parseInt(text3);
+        slot4cost = Integer.parseInt(text4);
     }
 }
