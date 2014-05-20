@@ -31,7 +31,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     public static final int tradedItemSlotIdx = 17;
 
     protected Boolean bHasLedger = false;
-
+    protected Boolean bHasSaleItem = false;
     protected ArrayList<LedgerData> ledgerData;
 
     public TileEntityTradingPost()
@@ -194,9 +194,15 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                 else if(slot < 16)
                     received[slot - inventory.length] = null;
                 else if(slot == ledgerSlotIdx)
+                {
+                    SetHasLedger(false);
                     ledgerStack = null;
+                }
                 else
+                {
+                    SetHasSaleItem(false);
                     tradedItem = null;
+                }
             }
             return returnStack;
         }
@@ -225,7 +231,13 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                 SetHasLedger(true);
         }
         else
+        {
             tradedItem = var2;
+            if(var2 == null)
+                SetHasSaleItem(false);
+            else
+                SetHasSaleItem(true);
+        }
     }
 
     @Override
@@ -271,6 +283,23 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             InitLedgerItems();
     }
 
+    public boolean GetHasLedger()
+    {
+        return bHasLedger;
+    }
+
+    public boolean GetHasSaleItem()
+    {
+        return bHasSaleItem;
+    }
+
+    public void SetHasSaleItem(boolean b)
+    {
+        bHasSaleItem = b;
+        if(b == true)
+            InitLedgerItems();
+    }
+
     public void InitLedgerItems()
     {
         ArrayList<LedgerData> ledgerItems = new ArrayList<LedgerData>();
@@ -290,7 +319,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                             int slot = slotTag.getByte("Slot");
                             ItemStack stack = ItemStack.loadItemStackFromNBT(slotTag);
                             int cost = slotTag.getByte("cost");
-                            LedgerData ledger = new LedgerData(stack.getItem(), slot, cost);
+                            LedgerData ledger = new LedgerData(stack, slot, cost);
                             ledgerItems.add(ledger);
                         }
                     }

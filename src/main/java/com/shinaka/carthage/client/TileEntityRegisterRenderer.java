@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityRegisterRenderer extends TileEntitySpecialRenderer
 {
     private final ModelRegister model;
-
+    protected ResourceLocation textures = (new ResourceLocation("carthage:textures/blocks/register.png"));
     public TileEntityRegisterRenderer()
     {
         this.model = new ModelRegister();
@@ -36,7 +36,7 @@ public class TileEntityRegisterRenderer extends TileEntitySpecialRenderer
     {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-        ResourceLocation textures = (new ResourceLocation("carthage:textures/blocks/register.png"));
+
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 
         GL11.glPushMatrix();

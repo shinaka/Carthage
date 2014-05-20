@@ -1,28 +1,30 @@
 package com.shinaka.carthage;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  * Created by James on 5/18/2014.
  */
 public class LedgerData
 {
-    protected Item item;
+    protected ItemStack itemStack;
     protected int slot;
     protected int cost;
 
-    public LedgerData(Item _item, int _slot, int _cost)
+    public LedgerData(ItemStack _item, int _slot, int _cost)
     {
-        item = _item;
+        itemStack = _item;
         slot = _slot;
         cost = _cost;
     }
 
-    public Item GetItem() { return item; }
+    public Item GetItem() { return itemStack.getItem(); }
+    public ItemStack GetItemStack() { return itemStack; }
     public int GetSlot() { return slot; }
     public int GetCost() { return cost; }
 
-    public void SetItem(Item _item) { item = _item; }
+    public void SetItem(ItemStack _item) { itemStack = _item; }
     public void SetSlot (int _slot) { slot = _slot; }
     public void SetCost (int _cost) { cost = _cost; }
 }
