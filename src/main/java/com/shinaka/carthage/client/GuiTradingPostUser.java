@@ -1,7 +1,7 @@
-package com.shinaka.carthage;
+package com.shinaka.carthage.client;
 
+import com.shinaka.carthage.ContainerTradingPostUser;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;

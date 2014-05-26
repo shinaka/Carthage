@@ -1,14 +1,13 @@
-package com.shinaka.carthage;
+package com.shinaka.carthage.client;
 
-import com.shinaka.carthage.blocks.TileEntityRegister;
+import com.shinaka.carthage.Carthage;
+import com.shinaka.carthage.ContainerTradingPostOwner;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
 import com.shinaka.carthage.network.TradingPostPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;

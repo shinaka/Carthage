@@ -1,4 +1,4 @@
-package com.shinaka.carthage;
+package com.shinaka.carthage.client;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;

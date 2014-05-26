@@ -2,6 +2,9 @@ package com.shinaka.carthage;
 
 import com.shinaka.carthage.blocks.TileEntityRegister;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
+import com.shinaka.carthage.client.GuiRegister;
+import com.shinaka.carthage.client.GuiTradingPostOwner;
+import com.shinaka.carthage.client.GuiTradingPostUser;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

@@ -1,5 +1,7 @@
-package com.shinaka.carthage;
+package com.shinaka.carthage.client;
 
+import com.shinaka.carthage.Carthage;
+import com.shinaka.carthage.ContainerRegister;
 import com.shinaka.carthage.blocks.TileEntityRegister;
 import com.shinaka.carthage.network.RegisterLedgerPacket;
 import cpw.mods.fml.relauncher.Side;
