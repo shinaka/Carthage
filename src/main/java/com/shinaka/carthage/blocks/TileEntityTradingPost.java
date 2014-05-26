@@ -283,6 +283,36 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         return false;
     }
 
+    public boolean IsItemInLedger(ItemStack testItem)
+    {
+        if(bHasLedger && ledgerData.size() > 0)
+        {
+            for(LedgerData ledgerItem : ledgerData)
+            {
+                ItemStack iStack = ledgerItem.GetItemStack();
+                if(iStack.getItem() == testItem.getItem() && iStack.getItemDamage() == testItem.getItemDamage())
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public int GetItemLedgerCost(ItemStack testItem)
+    {
+        if(bHasLedger)
+        {
+            for(LedgerData ledgerItem : ledgerData)
+            {
+                ItemStack iStack = ledgerItem.GetItemStack();
+                if(iStack.getItem() == testItem.getItem() && iStack.getItemDamage() == testItem.getItemDamage())
+                {
+                    return ledgerItem.GetCost();
+                }
+            }
+        }
+        return -1;
+    }
+
     public void SetHasLedger(boolean b)
     {
         bHasLedger = b;
