@@ -68,44 +68,38 @@ public class TileEntityTradingPostRenderer extends TileEntitySpecialRenderer
         //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glPushMatrix();
         GL11.glTranslated(0.03f, 0.50f, 0.375f );
-        for(int i = 0; i < 4; ++i)
-        {
-            if(itemList.size() == 0)
-                break;
-            GL11.glPushMatrix();
-            //Item item = itemList.get(i).GetItem();
-            ItemStack itemStack = itemList.get(i).GetItemStack();
-            ResourceLocation resourceLocation = texMgr.getResourceLocation(itemStack.getItem().getSpriteNumber());
-
-            Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
-
-            Vector3f vOffset = new Vector3f();
-
-            if(i == 0)
+        if(itemList.size() > 0 && itemList.size() <= 4) {
+            for (int i = 0; i < itemList.size(); ++i)
             {
-                vOffset.set(0.5f, 0.5f);
-            }
-            else if(i == 1)
-            {
-                vOffset.set(0.5f, 0.15f);
-            }
-            else if (i == 2)
-            {
-                vOffset.set(0.15f, 0.5f);
-            }
-            else
-            {
-                vOffset.set(0.15f, 0.15f);
-            }
+                if (itemList.get(i) == null)
+                    continue;
+                GL11.glPushMatrix();
+                //Item item = itemList.get(i).GetItem();
+                ItemStack itemStack = itemList.get(i).GetItemStack();
+                ResourceLocation resourceLocation = texMgr.getResourceLocation(itemStack.getItem().getSpriteNumber());
 
-            GL11.glTranslated(x + vOffset.getX(), y + vOffset.getY(), z + 0.5f);
-            //GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+                Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
 
-            IIcon icon = itemStack.getIconIndex();
-            renderItemIn2D(tessellator, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
-            GL11.glPopMatrix();
+                Vector3f vOffset = new Vector3f();
+
+                if (i == 0) {
+                    vOffset.set(0.5f, 0.5f);
+                } else if (i == 1) {
+                    vOffset.set(0.5f, 0.15f);
+                } else if (i == 2) {
+                    vOffset.set(0.15f, 0.5f);
+                } else {
+                    vOffset.set(0.15f, 0.15f);
+                }
+
+                GL11.glTranslated(x + vOffset.getX(), y + vOffset.getY(), z + 0.5f);
+                //GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+
+                IIcon icon = itemStack.getIconIndex();
+                renderItemIn2D(tessellator, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
+                GL11.glPopMatrix();
+            }
         }
-
         //Draw For Sale Item
         if(tePost.GetHasSaleItem())
         {

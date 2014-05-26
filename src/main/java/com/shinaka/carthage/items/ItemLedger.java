@@ -42,7 +42,7 @@ public class ItemLedger extends Item
                     if (slotTag != null) {
                         ItemStack stack = ItemStack.loadItemStackFromNBT(slotTag);
                         int cost = slotTag.getByte("cost");
-                        infoList.add("\u00a7D" + stack.getDisplayName() + "(" + Integer.toString(cost) + ")");
+                        infoList.add(stack.getDisplayName() + "(" + Integer.toString(cost) + ")");
                     }
                 }
             }

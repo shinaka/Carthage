@@ -207,6 +207,8 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                 else if(slot == ledgerSlotIdx)
                 {
                     SetHasLedger(false);
+                    LedgerStatusPacket packet = new LedgerStatusPacket(xCoord, yCoord, zCoord, GetHasLedger());
+                    Carthage.packetPipeline.sendToAll(packet);
                     ledgerStack = null;
                 }
                 else
@@ -215,9 +217,13 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                     tradedItem = null;
                 }
             }
+
+            //Because this TE's inventory affects its rendering, we HAVE to mark it as Dirty any time it changes
+            this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             return returnStack;
         }
-
+        //Because this TE's inventory affects its rendering, we HAVE to mark it as Dirty any time it changes
+        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         return null;
     }
 
@@ -252,6 +258,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             else
                 SetHasSaleItem(true);
         }
+
+        //The object is "Dirty" at this point, so we need to let Forge know to force the update
+        this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
