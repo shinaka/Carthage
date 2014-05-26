@@ -12,11 +12,30 @@ import net.minecraft.inventory.*;
  */
 public class ContainerTradingPostUser extends Container
 {
-    public ContainerTradingPostUser(InventoryPlayer inventory, TileEntityTradingPost te)
-    {
+    TileEntityTradingPost tePost;
 
+
+    public ContainerTradingPostUser(InventoryPlayer inventoryPlayer, TileEntityTradingPost te)
+    {
+        tePost = te;
+        
+        bindPlayerInventory(inventoryPlayer);
     }
 
+
+    protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)
+    {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
+                        10 + j * 18, 129 + i * 18));
+            }
+        }
+
+        for (int i = 0; i < 9; i++) {
+            addSlotToContainer(new Slot(inventoryPlayer, i, 10 + i * 18, 187));
+        }
+    }
 
     @Override
     public boolean canInteractWith(EntityPlayer var1) {
