@@ -2,6 +2,9 @@ package com.shinaka.carthage.blocks;
 
 import com.shinaka.carthage.Carthage;
 import com.shinaka.carthage.LedgerData;
+import com.shinaka.carthage.network.LedgerStatusPacket;
+import com.shinaka.carthage.network.RegisterLedgerPacket;
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -12,6 +15,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 
@@ -236,6 +240,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                 SetHasLedger(false);
             else
                 SetHasLedger(true);
+            LedgerStatusPacket packet = new LedgerStatusPacket(xCoord, yCoord, zCoord, GetHasLedger());
+            Carthage.packetPipeline.sendToAll(packet);
+
         }
         else
         {
@@ -378,4 +385,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     }
 
     public int getItemCost() { return itemCost; }
+
+    public void SendLedgerStatusPacket()
+    {
+
+    }
 }

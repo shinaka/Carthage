@@ -6,46 +6,45 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Created by James on 5/25/2014.
+ * Created by James on 5/26/2014.
  */
-public class TradingPostPacket extends AbstractTileEntityPacket
+public class LedgerStatusPacket extends AbstractTileEntityPacket
 {
+    protected boolean bHasLedger;
 
-    protected int itemCost = 0;
+    public LedgerStatusPacket() { super(); }
 
-    public TradingPostPacket() { super(); }
-
-    public TradingPostPacket( int _x, int _y, int _z, int _itemCost )
+    public LedgerStatusPacket(int _x, int _y, int _z, boolean _hasLedger)
     {
         super(_x, _y, _z);
-        itemCost = _itemCost;
+        bHasLedger = _hasLedger;
     }
 
     @Override
     public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         super.encodeInto(ctx, buffer);
-        buffer.writeInt(itemCost);
+        buffer.writeBoolean(bHasLedger);
     }
 
     @Override
     public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer)
     {
         super.decodeInto(ctx, buffer);
-        itemCost = buffer.readInt();
+        bHasLedger = buffer.readBoolean();
     }
 
     @Override
     public void handleClientSide(EntityPlayer player)
     {
-
+        TileEntityTradingPost tePost = (TileEntityTradingPost) player.worldObj.getTileEntity(x,y,z);
+        if(tePost != null)
+            tePost.SetHasLedger(bHasLedger);
     }
 
     @Override
     public void handleServerSide(EntityPlayer player)
     {
-        TileEntityTradingPost tePost = (TileEntityTradingPost) player.worldObj.getTileEntity(x,y,z);
-        if(tePost != null)
-            tePost.setItemCost(itemCost);
+
     }
 }

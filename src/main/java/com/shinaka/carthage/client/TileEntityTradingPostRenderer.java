@@ -70,6 +70,8 @@ public class TileEntityTradingPostRenderer extends TileEntitySpecialRenderer
         GL11.glTranslated(0.03f, 0.50f, 0.375f );
         for(int i = 0; i < 4; ++i)
         {
+            if(itemList.size() == 0)
+                break;
             GL11.glPushMatrix();
             //Item item = itemList.get(i).GetItem();
             ItemStack itemStack = itemList.get(i).GetItemStack();

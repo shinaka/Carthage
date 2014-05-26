@@ -7,6 +7,7 @@ import com.shinaka.carthage.blocks.TileEntityTradingPostBlock;
 import com.shinaka.carthage.client.TileEntityTradingPostRenderer;
 import com.shinaka.carthage.items.ItemLedger;
 import com.shinaka.carthage.items.TradingPostItemBlock;
+import com.shinaka.carthage.network.LedgerStatusPacket;
 import com.shinaka.carthage.network.PacketPipeline;
 import com.shinaka.carthage.network.RegisterLedgerPacket;
 import com.shinaka.carthage.network.TradingPostPacket;
@@ -54,6 +55,7 @@ public class Carthage {
         packetPipeline.initialise();
         packetPipeline.registerPacket(RegisterLedgerPacket.class);
         packetPipeline.registerPacket(TradingPostPacket.class);
+        packetPipeline.registerPacket(LedgerStatusPacket.class);
     }
 
     @EventHandler

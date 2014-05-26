@@ -16,14 +16,14 @@ import org.lwjgl.opengl.GL11;
 /**
  * Created by Jim on 5/11/2014.
  */
-public class GuiTradingPostOwner extends GuiContainer
+public class GuiTradingPostOwner extends CustomGuiContainer
 {
     protected GuiTextField costTextField;
     protected TileEntityTradingPost tePost;
 
     public GuiTradingPostOwner(InventoryPlayer inventory, TileEntityTradingPost te)
     {
-        super(new ContainerTradingPostOwner(inventory, te));
+        super(new ContainerTradingPostOwner(inventory, te), 176, 166);
         tePost = te;
     }
 
@@ -133,36 +133,6 @@ public class GuiTradingPostOwner extends GuiContainer
             tePost.setItemCost(Integer.parseInt(costTextField.getText()));
 
         sendServerPacket();
-    }
-
-    protected void drawItemSlot(int sizeX, int sizeY, int left, int top)
-    {
-        int x1 = getGuiLeft() + left;
-        int y1 = getGuiTop() + top;
-        int x2 = x1 + sizeX;
-        int y2 = y1 + sizeY;
-        this.drawGradientRect(x1, y1, x2, y2, 2120506433, 2120506433);
-    }
-
-    protected void drawColoredRect(int sizeX, int sizeY, int left, int top, int color)
-    {
-        int x1 = getGuiLeft() + left;
-        int y1 = getGuiTop() + top;
-        int x2 = x1 + sizeX;
-        int y2 = y1 + sizeY;
-        this.drawGradientRect(x1, y1, x2, y2, color, color);
-    }
-
-    protected int getGuiLeft()
-    {
-        ScaledResolution res = new ScaledResolution( this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        return (res.getScaledWidth() - 176) / 2;
-    }
-
-    protected int getGuiTop()
-    {
-        ScaledResolution res = new ScaledResolution( this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
-        return (res.getScaledHeight() - 166) / 2;
     }
 
     @SideOnly(Side.CLIENT)
