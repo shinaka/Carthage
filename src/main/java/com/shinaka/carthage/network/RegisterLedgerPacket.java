@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 //Sent from the client ONLY to the server when a text field is updated on the Register GUI
 public class RegisterLedgerPacket extends AbstractPacket
 {
-    public RegisterLedgerPacket() { super(); }
     protected String text1 = "0";
     protected String text2 = "0";
     protected String text3 = "0";
@@ -21,6 +20,8 @@ public class RegisterLedgerPacket extends AbstractPacket
     protected int x = 0;
     protected int y = 0;
     protected int z = 0;
+
+    public RegisterLedgerPacket() { super(); }
 
     public RegisterLedgerPacket(int _x, int _y, int _z, String _text1, String _text2, String _text3, String _text4)
     {
@@ -67,6 +68,7 @@ public class RegisterLedgerPacket extends AbstractPacket
     public void handleServerSide(EntityPlayer player)
     {
         TileEntityRegister teRegister = (TileEntityRegister) player.worldObj.getTileEntity(x,y,z);
-        teRegister.setTextValues(text1, text2, text3, text4);
+        if(teRegister != null)
+            teRegister.setTextValues(text1, text2, text3, text4);
     }
 }

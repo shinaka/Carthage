@@ -43,7 +43,7 @@ public class ContainerTradingPostOwner extends Container {
         addSlotToContainer(new Slot(te, TileEntityTradingPost.ledgerSlotIdx, 128, 61));
 
         //For Sale
-        addSlotToContainer(new Slot(te, TileEntityTradingPost.tradedItemSlotIdx, 35, 61));
+        addSlotToContainer(new Slot(te, TileEntityTradingPost.tradedItemSlotIdx, 18, 61));
 
         bindPlayerInventory(inventoryPlayer);
     }

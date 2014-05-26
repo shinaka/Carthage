@@ -22,7 +22,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 {
     protected ItemStack[] inventory;
     protected ItemStack[] received;
-
+    protected int itemCost = 100;
     protected ItemStack tradedItem;
     protected String blockOwner;
     protected ItemStack ledgerStack;
@@ -52,6 +52,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         //Block Owner
         if(nbt.hasKey("blockOwner"))
             blockOwner = nbt.getString("blockOwner");
+
+        if(nbt.hasKey("itemCost"))
+            itemCost = nbt.getInteger("itemCost");
 
         //Deserialize the Inventory
         NBTTagList tagList = nbt.getTagList("Inventory", 10);
@@ -92,7 +95,10 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     {
         if(blockOwner != null && !blockOwner.isEmpty())
             nbt.setString("blockOwner", blockOwner);
-        super.writeToNBT(nbt);
+        if(itemCost > 0)
+            nbt.setInteger("itemCost", itemCost);
+        else
+            nbt.setInteger("itemCost", 1);
 
         NBTTagList itemList = new NBTTagList();
         for(int i = 0; i < inventory.length; ++i)
@@ -133,6 +139,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             itemList.appendTag(tradedTag);
         }
         nbt.setTag("Inventory", itemList);
+        super.writeToNBT(nbt);
     }
 
     @Override
@@ -334,4 +341,11 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     {
         return ledgerData;
     }
+
+    public void setItemCost(int _itemCost)
+    {
+        itemCost = _itemCost;
+    }
+
+    public int getItemCost() { return itemCost; }
 }

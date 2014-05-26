@@ -2,7 +2,11 @@ package com.shinaka.carthage;
 
 import com.shinaka.carthage.blocks.TileEntityRegister;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
+import com.shinaka.carthage.network.TradingPostPacket;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -14,9 +18,13 @@ import org.lwjgl.opengl.GL11;
  */
 public class GuiTradingPostOwner extends GuiContainer
 {
+    protected GuiTextField costTextField;
+    protected TileEntityTradingPost tePost;
+
     public GuiTradingPostOwner(InventoryPlayer inventory, TileEntityTradingPost te)
     {
         super(new ContainerTradingPostOwner(inventory, te));
+        tePost = te;
     }
 
     @Override
@@ -25,6 +33,10 @@ public class GuiTradingPostOwner extends GuiContainer
         xSize = 180;
         ySize = 256;
 
+        costTextField = new GuiTextField(this.mc.fontRenderer, 43, 63, 26, 12);
+        costTextField.setMaxStringLength(3);
+        costTextField.setText(Integer.toString(tePost.getItemCost()));
+        costTextField.setFocused(true);
         super.initGui();
     }
 
@@ -37,6 +49,9 @@ public class GuiTradingPostOwner extends GuiContainer
 
         this.drawTexturedModalRect(getGuiLeft(), getGuiTop(), 0, 0, 256, 256);
 
+        //Draw Section seperators
+        this.drawColoredRect(74, 1, 4, 34, -1110506433);
+        this.drawColoredRect(74, 1, 98, 34, -1110506433);
 
         //Draw internal inventories
         this.drawItemSlot(16, 16, 8, 63);
@@ -58,7 +73,7 @@ public class GuiTradingPostOwner extends GuiContainer
         this.drawItemSlot(16, 16, 152, 46);
 
         //Draw for sale slot
-        this.drawItemSlot(16, 16, 33, 16);
+        this.drawItemSlot(16, 16, 16, 16);
 
         this.drawItemSlot(16, 16, 126, 16);
 
@@ -66,8 +81,8 @@ public class GuiTradingPostOwner extends GuiContainer
 
         FontRenderer fontRenderer = this.mc.fontRenderer;
 
-        fontRenderer.drawString("Stock", getGuiLeft() + 8, getGuiTop() + 35, 4210752);
-        fontRenderer.drawString("Received", getGuiLeft() + 101, getGuiTop() + 35, 4210752);
+        fontRenderer.drawString("Stock", getGuiLeft() + 8, getGuiTop() + 37, 4210752);
+        fontRenderer.drawString("Received", getGuiLeft() + 101, getGuiTop() + 37, 4210752);
 
         fontRenderer.drawString("Ledger", getGuiLeft() + 117, getGuiTop() + 5, 4210752);
         fontRenderer.drawString("For Sale", getGuiLeft() + 20, getGuiTop() + 5, 4210752);
@@ -76,8 +91,50 @@ public class GuiTradingPostOwner extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int param1, int param2)
     {
-
+        costTextField.drawTextBox();
     }
+
+    @Override
+    protected void keyTyped(char par1, int par2)
+    {
+        if (par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.getKeyCode())
+        {
+            this.mc.thePlayer.closeScreen();
+        }
+        if ((par1 < 48 || par1 > 57) && par1 != 8 && par1 != 0)
+            return;
+        int cost = 0;
+        if(costTextField.getText().length() > 0)
+        {
+            cost = Integer.parseInt(costTextField.getText());
+        }
+
+        if(cost > 999)
+        {
+            cost = 999;
+            costTextField.setText(Integer.toString(cost));
+        }
+        else
+        {
+            costTextField.textboxKeyTyped(par1, par2);
+            if(costTextField.getText() == "")
+                costTextField.setText("1");
+            String txt = costTextField.getText();
+            if(txt.length() >= 1)
+            {
+                if(txt.startsWith("0"))
+                {
+                    costTextField.setText(txt.substring(1));
+                }
+            }
+        }
+
+        if(costTextField.getText().length() > 0)
+            tePost.setItemCost(Integer.parseInt(costTextField.getText()));
+
+        sendServerPacket();
+    }
+
     protected void drawItemSlot(int sizeX, int sizeY, int left, int top)
     {
         int x1 = getGuiLeft() + left;
@@ -85,6 +142,15 @@ public class GuiTradingPostOwner extends GuiContainer
         int x2 = x1 + sizeX;
         int y2 = y1 + sizeY;
         this.drawGradientRect(x1, y1, x2, y2, 2120506433, 2120506433);
+    }
+
+    protected void drawColoredRect(int sizeX, int sizeY, int left, int top, int color)
+    {
+        int x1 = getGuiLeft() + left;
+        int y1 = getGuiTop() + top;
+        int x2 = x1 + sizeX;
+        int y2 = y1 + sizeY;
+        this.drawGradientRect(x1, y1, x2, y2, color, color);
     }
 
     protected int getGuiLeft()
@@ -97,5 +163,12 @@ public class GuiTradingPostOwner extends GuiContainer
     {
         ScaledResolution res = new ScaledResolution( this.mc.gameSettings, this.mc.displayWidth, this.mc.displayHeight);
         return (res.getScaledHeight() - 166) / 2;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void sendServerPacket()
+    {
+        TradingPostPacket packet = new TradingPostPacket(tePost.xCoord, tePost.yCoord, tePost.zCoord, tePost.getItemCost());
+        Carthage.packetPipeline.sendToServer(packet);
     }
 }

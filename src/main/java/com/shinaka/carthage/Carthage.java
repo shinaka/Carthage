@@ -9,6 +9,7 @@ import com.shinaka.carthage.items.ItemLedger;
 import com.shinaka.carthage.items.TradingPostItemBlock;
 import com.shinaka.carthage.network.PacketPipeline;
 import com.shinaka.carthage.network.RegisterLedgerPacket;
+import com.shinaka.carthage.network.TradingPostPacket;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -52,6 +53,7 @@ public class Carthage {
         proxy.registerRecipes();
         packetPipeline.initialise();
         packetPipeline.registerPacket(RegisterLedgerPacket.class);
+        packetPipeline.registerPacket(TradingPostPacket.class);
     }
 
     @EventHandler
