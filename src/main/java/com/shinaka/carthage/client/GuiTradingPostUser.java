@@ -2,6 +2,7 @@ package com.shinaka.carthage.client;
 
 import com.shinaka.carthage.ContainerTradingPostUser;
 import com.shinaka.carthage.blocks.TileEntityTradingPost;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -12,11 +13,13 @@ import org.lwjgl.opengl.GL11;
 public class GuiTradingPostUser extends CustomGuiContainer
 {
     protected TileEntityTradingPost tePost;
+    protected EntityPlayer player;
 
     public GuiTradingPostUser(InventoryPlayer inventory, TileEntityTradingPost te)
     {
         super(new ContainerTradingPostUser(inventory, te), 176, 166);
         tePost = te;
+        player = inventory.player;
     }
 
     @Override

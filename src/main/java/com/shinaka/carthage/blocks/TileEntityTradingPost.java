@@ -5,6 +5,7 @@ import com.shinaka.carthage.LedgerData;
 import com.shinaka.carthage.network.LedgerStatusPacket;
 import com.shinaka.carthage.network.RegisterLedgerPacket;
 import cpw.mods.fml.common.FMLCommonHandler;
+import joptsimple.util.KeyValuePair;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -18,6 +19,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by James on 4/28/2014.
@@ -38,6 +41,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     protected Boolean bHasSaleItem = false;
     protected ArrayList<LedgerData> ledgerData;
 
+    protected Map<String, Integer> balanceSheet = new HashMap<String, Integer>();
     public TileEntityTradingPost()
     {
         inventory = new ItemStack[8];
@@ -50,6 +54,36 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     }
 
     public String getBlockOwner() { return blockOwner; }
+
+    private void ReadBalanceSheet(NBTTagCompound nbt)
+    {
+        balanceSheet.clear();
+        NBTTagList tagList = nbt.getTagList("BalanceSheet", 10);
+        for(int i = 0; i < tagList.tagCount(); ++i)
+        {
+            NBTTagCompound tag = tagList.getCompoundTagAt(i);
+            String username = tag.getString("Username");
+            int credits = tag.getInteger("Credits");
+            balanceSheet.put(username, credits);
+        }
+    }
+
+    private void WriteBalanceSheet(NBTTagCompound nbt)
+    {
+        NBTTagList tagList = new NBTTagList();
+
+        for(String key : balanceSheet.keySet())
+        {
+            int credits = balanceSheet.get(key);
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setInteger("Credits", credits);
+            tag.setString("Username", key);
+            tagList.appendTag(tag);
+        }
+
+        nbt.setTag("BalanceSheet", tagList);
+    }
+
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
@@ -60,6 +94,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         if(nbt.hasKey("itemCost"))
             itemCost = nbt.getInteger("itemCost");
 
+        ReadBalanceSheet(nbt);
         //Deserialize the Inventory
         NBTTagList tagList = nbt.getTagList("Inventory", 10);
         for(int i = 0; i < tagList.tagCount(); ++i)
@@ -94,6 +129,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         super.readFromNBT(nbt);
     }
 
+
     @Override
     public void writeToNBT(NBTTagCompound nbt)
     {
@@ -104,6 +140,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         else
             nbt.setInteger("itemCost", 1);
 
+        WriteBalanceSheet(nbt);
         NBTTagList itemList = new NBTTagList();
         for(int i = 0; i < inventory.length; ++i)
         {

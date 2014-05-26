@@ -12,13 +12,13 @@ import net.minecraft.inventory.*;
  */
 public class ContainerTradingPostUser extends Container
 {
-    TileEntityTradingPost tePost;
-
+    protected TileEntityTradingPost tePost;
+    protected EntityPlayer player;
 
     public ContainerTradingPostUser(InventoryPlayer inventoryPlayer, TileEntityTradingPost te)
     {
         tePost = te;
-        
+        player = inventoryPlayer.player;
         bindPlayerInventory(inventoryPlayer);
     }
 
