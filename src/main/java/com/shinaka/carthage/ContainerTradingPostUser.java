@@ -26,12 +26,13 @@ public class ContainerTradingPostUser extends Container
         //Buy Slot
         addSlotToContainer(new Slot(tePost, 1, 14, 107));
 
+        /*
         //ForBuy Slots
         addSlotToContainer(new Slot(tePost, 2, 137, 53));
         addSlotToContainer(new Slot(tePost, 3, 137, 71));
         addSlotToContainer(new Slot(tePost, 4, 137, 89));
         addSlotToContainer(new Slot(tePost, 5, 137, 107));
-
+        */
         bindPlayerInventory(inventoryPlayer);
     }
 

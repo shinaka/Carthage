@@ -420,9 +420,33 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         }
     }
 
+    public int GetCreditsForUser(String username)
+    {
+        if(!balanceSheet.containsKey(username))
+        {
+            balanceSheet.put(username, 0);
+        }
+
+        return balanceSheet.get(username);
+    }
+
     public ArrayList<LedgerData> GetLedgerData()
     {
         return ledgerData;
+    }
+
+    public ArrayList<ItemStack> GetLedgerItemsAsStack()
+    {
+        ArrayList<ItemStack> returnList = new ArrayList<ItemStack>();
+        for(LedgerData ld : ledgerData)
+        {
+            if(ld.GetItemStack() != null)
+            {
+                returnList.add(ld.GetItemStack());
+            }
+        }
+
+        return returnList;
     }
 
     public void setItemCost(int _itemCost)
