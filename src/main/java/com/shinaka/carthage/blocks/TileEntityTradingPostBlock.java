@@ -25,6 +25,7 @@ public class TileEntityTradingPostBlock extends BlockContainer
     {
         super(Material.wood);
         this.setCreativeTab(CreativeTabs.tabMisc);
+        this.setHardness(1.5f).setResistance(10.0f);
     }
 
     @Override
@@ -38,20 +39,35 @@ public class TileEntityTradingPostBlock extends BlockContainer
         ItemStack itemStack;// = new ItemStack(block);
         TileEntity t = world.getTileEntity(x,y,z);
 
-        //ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+
 
         if (t instanceof TileEntityTradingPost) {
             TileEntityTradingPost tPost = (TileEntityTradingPost ) t;
             String name = tPost.getBlockOwner();
-
+            ArrayList<ItemStack> items = new ArrayList<ItemStack>();
             itemStack = new ItemStack(block, 1, 0);
             if (!itemStack.hasTagCompound()) {
                 itemStack.setTagCompound(new NBTTagCompound());
             }
             if(name != null && !name.isEmpty())
                 itemStack.getTagCompound().setString("blockOwner", name);
-            EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, itemStack);
-            world.spawnEntityInWorld(entityitem);
+
+            //Now we need to empty out the inventory
+            //The Trading post technically has an 18 size inventory, but the last
+            //item is the traded item, and just a clone.
+            for(int i = 0; i < 17; ++i)
+            {
+                ItemStack item = tPost.getStackInSlot(i);
+                if(item != null)
+                {
+                    items.add(item);
+                }
+            }
+            for(ItemStack stackItem : items)
+            {
+                EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, stackItem);
+                world.spawnEntityInWorld(entityitem);
+            }
         }
 
     }
@@ -104,12 +120,13 @@ public class TileEntityTradingPostBlock extends BlockContainer
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
     {
-        return null;
-        /*
+        //return null;
+
         TileEntity t = world.getTileEntity(x,y,z);
 
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 
+        //Get the TileEntity and persist the blockOwner into the item NBT
         if (t instanceof TileEntityTradingPost) {
             TileEntityTradingPost tPost = (TileEntityTradingPost ) t;
             String name = tPost.getBlockOwner();
@@ -120,10 +137,21 @@ public class TileEntityTradingPostBlock extends BlockContainer
             }
             stack.getTagCompound().setString("blockOwner", name);
             items.add(stack);
+
+            //Now we need to empty out the inventory
+            //The Trading post technically has an 18 size inventory, but the last
+            //item is the traded item, and just a clone.
+            for(int i = 0; i < 17; ++i)
+            {
+                ItemStack item = tPost.getStackInSlot(i);
+                if(item != null)
+                {
+                    items.add(item);
+                }
+            }
         }
 
         return items;
-        */
     }
 
     @Override
@@ -143,5 +171,19 @@ public class TileEntityTradingPostBlock extends BlockContainer
     public String getUnlocalizedName()
     {
         return "Trading Post";
+    }
+
+    @Override
+    public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z)
+    {
+        TileEntityTradingPost tpost = (TileEntityTradingPost)world.getTileEntity(x, y, z);
+        if(tpost != null)
+        {
+            if(tpost.getBlockOwner().equals(player.getDisplayName()))
+            {
+                return super.getPlayerRelativeBlockHardness(player, world, x, y, z);
+            }
+        }
+        return -1.0f;
     }
 }

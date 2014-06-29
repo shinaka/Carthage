@@ -1,6 +1,7 @@
 package com.shinaka.carthage.blocks;
 
 import com.shinaka.carthage.Carthage;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
