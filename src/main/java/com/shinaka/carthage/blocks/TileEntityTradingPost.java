@@ -167,21 +167,18 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             itemList.appendTag(tag);
         }
 
+        NBTTagCompound ledgerTag = new NBTTagCompound();
+        ledgerTag.setByte("Slot", (byte) ledgerSlotIdx);
         if(ledgerStack != null)
-        {
-            NBTTagCompound ledgerTag = new NBTTagCompound();
-            ledgerTag.setByte("Slot", (byte) ledgerSlotIdx);
             ledgerStack.writeToNBT(ledgerTag);
-            itemList.appendTag(ledgerTag);
-        }
+        itemList.appendTag(ledgerTag);
 
+        NBTTagCompound tradedTag = new NBTTagCompound();
+        tradedTag.setByte("Slot", (byte) tradedItemSlotIdx);
         if(tradedItem != null)
-        {
-            NBTTagCompound tradedTag = new NBTTagCompound();
-            tradedTag.setByte("Slot", (byte) tradedItemSlotIdx);
             tradedItem.writeToNBT(tradedTag);
-            itemList.appendTag(tradedTag);
-        }
+        itemList.appendTag(tradedTag);
+
         nbt.setTag("Inventory", itemList);
         super.writeToNBT(nbt);
     }
