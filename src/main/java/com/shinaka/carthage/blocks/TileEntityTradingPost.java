@@ -96,6 +96,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 
         ReadBalanceSheet(nbt);
         //Deserialize the Inventory
+        //And CLEAR THE GOD DAMNED INVENTORY BEFORE YOU DO IT, IDIOT
+        inventory = new ItemStack[8];
+        received = new ItemStack[8];
         NBTTagList tagList = nbt.getTagList("Inventory", 10);
         for(int i = 0; i < tagList.tagCount(); ++i)
         {
@@ -146,10 +149,11 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         {
             NBTTagCompound tag = new NBTTagCompound();
             ItemStack slot = inventory[i];
-            if(slot == null)
-                continue;
             tag.setByte("Slot", (byte) i);
-            slot.writeToNBT(tag);
+            //I'm a damned idiot. We need to actually send empty slots in the packet and let the client
+            //create NULLed item slots, or else client info will always be stale
+            if(slot != null)
+                slot.writeToNBT(tag);
             itemList.appendTag(tag);
         }
 
@@ -157,10 +161,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
         {
             NBTTagCompound tag = new NBTTagCompound();
             ItemStack slot = received[i];
-            if(slot == null)
-                continue;
             tag.setByte("Slot", (byte) (i + inventory.length));
-            slot.writeToNBT(tag);
+            if(slot != null)
+                slot.writeToNBT(tag);
             itemList.appendTag(tag);
         }
 

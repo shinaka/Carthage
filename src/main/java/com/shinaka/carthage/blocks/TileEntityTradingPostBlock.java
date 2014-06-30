@@ -39,8 +39,6 @@ public class TileEntityTradingPostBlock extends BlockContainer
         ItemStack itemStack;// = new ItemStack(block);
         TileEntity t = world.getTileEntity(x,y,z);
 
-
-
         if (t instanceof TileEntityTradingPost) {
             TileEntityTradingPost tPost = (TileEntityTradingPost ) t;
             String name = tPost.getBlockOwner();
