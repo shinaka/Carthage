@@ -5,6 +5,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 
 /**
@@ -21,18 +24,11 @@ public class ContainerTradingPostUser extends Container
         player = inventoryPlayer.player;
 
         //Sell Slot
-        addSlotToContainer(new Slot(tePost, 0, 14, 62));
+        addSlotToContainer(new Slot(tePost, 18, 14, 62));
 
         //Buy Slot
-        addSlotToContainer(new Slot(tePost, 1, 14, 107));
+        addSlotToContainer(new Slot(tePost, TileEntityTradingPost.tradedItemSlotIdx, 14, 107));
 
-        /*
-        //ForBuy Slots
-        addSlotToContainer(new Slot(tePost, 2, 137, 53));
-        addSlotToContainer(new Slot(tePost, 3, 137, 71));
-        addSlotToContainer(new Slot(tePost, 4, 137, 89));
-        addSlotToContainer(new Slot(tePost, 5, 137, 107));
-        */
         bindPlayerInventory(inventoryPlayer);
     }
 
@@ -54,5 +50,93 @@ public class ContainerTradingPostUser extends Container
     @Override
     public boolean canInteractWith(EntityPlayer var1) {
         return true;
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slot)
+    {
+        ItemStack stack = null;
+        Slot slotObject = (Slot) inventorySlots.get(slot);
+
+        //null checks and checks if the item can be stacked (maxStackSize > 1)
+        if (slotObject != null && slotObject.getHasStack()) {
+            ItemStack stackInSlot = slotObject.getStack();
+            stack = stackInSlot.copy();
+
+            //merges the item into player inventory since its in the tileEntity
+            if (slot < 9) {
+                if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
+                    return null;
+                }
+            }
+            //places it into the tileEntity is possible since its in the player inventory
+            else if (!this.mergeItemStack(stackInSlot, 0, 9, false)) {
+                return null;
+            }
+
+            if (stackInSlot.stackSize == 0) {
+                slotObject.putStack(null);
+            } else {
+                slotObject.onSlotChanged();
+            }
+
+            if (stackInSlot.stackSize == stack.stackSize) {
+                return null;
+            }
+            slotObject.onPickupFromSlot(player, stackInSlot);
+        }
+        return stack;
+    }
+
+    @Override
+    public ItemStack slotClick(int slot, int par2, int par3, EntityPlayer player)
+    {
+        if(slot == 0)
+        {
+            if(player.inventory.getItemStack() != null)
+            {
+                ItemStack mouseItem = player.inventory.getItemStack();
+                if(tePost.IsItemInLedger(mouseItem) && tePost.CanBuyItem(mouseItem))
+                {
+                    int cost = tePost.GetItemLedgerCost(mouseItem) * mouseItem.stackSize;
+                    tePost.AddCreditsForUser(player.getDisplayName(), cost);
+                    tePost.AddReceivedItem(mouseItem);
+                    player.inventory.setItemStack(null);
+                    return null;
+                }
+                return null;
+            }
+        }
+        else if(slot == 1)
+        {
+            if(player.inventory.getItemStack() == null && tePost.GetHasSaleItem())
+            {
+                //Can the player afford at least one?
+                if(tePost.HasEnoughCredits(player.getDisplayName(), tePost.getItemCost()))
+                {
+                    int availCredits = tePost.GetCreditsForUser(player.getDisplayName());
+                    int itemCost = tePost.getItemCost();
+
+                    //We know how many we want to buy now, but how many CAN we?
+                    int totalToPurchase = availCredits / itemCost;
+                    int totalAvail = tePost.GetAvailableSaleItemCount();
+                    if(totalAvail < totalToPurchase)
+                        totalToPurchase = totalAvail;
+
+                    int totalCost = totalToPurchase * itemCost;
+                    ItemStack stack = tePost.getStackInSlot(tePost.tradedItemSlotIdx).copy();
+                    stack.stackSize = totalToPurchase;
+
+                    tePost.SubtractCreditsForUser(player.getDisplayName(), totalCost);
+                    tePost.RemoveSaleItemsByCount(totalToPurchase);
+                    player.inventory.addItemStackToInventory(stack.copy());
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return super.slotClick(slot, par2, par3, player);
     }
 }

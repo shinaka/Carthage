@@ -67,7 +67,7 @@ public class ContainerTradingPostOwner extends Container {
     {
         switch(slot)
         {
-            case TileEntityTradingPost.ledgerSlotIdx:
+            case 16:
             {
                 if(player.inventory.getItemStack() != null &&
                         player.inventory.getItemStack().getItem() == Carthage.itemLedger)
@@ -87,7 +87,7 @@ public class ContainerTradingPostOwner extends Container {
                 }
 
             }
-            case TileEntityTradingPost.tradedItemSlotIdx:
+            case 17:
             {
                 if(player.inventory.getItemStack() != null)
                 {

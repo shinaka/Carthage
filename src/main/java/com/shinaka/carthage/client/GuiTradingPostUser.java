@@ -50,8 +50,6 @@ public class GuiTradingPostUser extends CustomGuiContainer
 
         this.drawTexturedModalRect(getGuiLeft(), getGuiTop(), 0, 0, 256, 256);
 
-
-
         int itemHeight = 8;
         final int itemSpace = 18;
         for(ItemStack item : ledgerItems)

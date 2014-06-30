@@ -197,7 +197,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 
     @Override
     public int getSizeInventory() {
-        return inventory.length + received.length + 2;
+        return inventory.length + received.length + 3;
     }
 
     @Override
@@ -209,8 +209,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             return received[idx - inventory.length];
         else if(idx == ledgerSlotIdx)
             return ledgerStack;
-        else
+        else if(idx == tradedItemSlotIdx)
             return tradedItem;
+        return null;
     }
 
     @Override
@@ -223,8 +224,10 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             stack =  received[slot - inventory.length];
         else if(slot == ledgerSlotIdx)
             stack = ledgerStack;
-        else
+        else if(slot == tradedItemSlotIdx)
             stack = tradedItem;
+        else
+            stack = null;
 
         if(stack != null)
         {
@@ -287,7 +290,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             Carthage.packetPipeline.sendToAll(packet);
 
         }
-        else
+        else if(idx == tradedItemSlotIdx)
         {
             tradedItem = var2;
             if(var2 == null)
@@ -390,6 +393,84 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
             InitLedgerItems();
     }
 
+    public void RemoveSaleItemsByCount(int count)
+    {
+        for(ItemStack item : inventory)
+        {
+            if(item != null && item.getItem() == tradedItem.getItem())
+            {
+                if(item.stackSize >= count)
+                {
+                    int toRemove = item.stackSize - count;
+                    item.stackSize = toRemove;
+                    if(item.stackSize == 0)
+                        item = null;
+                    return;
+                }
+                else
+                {
+                    count = count - item.stackSize;
+                    item = null;
+                }
+            }
+        }
+    }
+
+    public void AddReceivedItem(ItemStack stack)
+    {
+        //First, do we already have some of this item?
+        for(ItemStack item : received)
+        {
+            if(item != null && item.getItem() == stack.getItem())
+            {
+                if(item.stackSize < item.getMaxStackSize())
+                {
+                    int toAdd = item.getMaxStackSize() - item.stackSize;
+                    if(stack.stackSize <= toAdd)
+                    {
+                        item.stackSize = item.stackSize + stack.stackSize;
+                        return;
+                    }
+                    else
+                    {
+                        item.stackSize = item.getMaxStackSize();
+                        stack.stackSize = stack.stackSize - toAdd;
+                    }
+                }
+            }
+        }
+
+        if(stack.stackSize > 0)
+        {
+            //Find an empty slot
+            for(int i = 0; i < received.length; ++i)
+            {
+                if(received[i] == null)
+                {
+                    received[i] = stack.copy();
+                    return;
+                }
+            }
+        }
+    }
+
+    public boolean CanBuyItem(ItemStack item)
+    {
+        int availSlots = 0;
+        for(int i = 0; i < received.length; ++i)
+        {
+            if(received[i] == null)
+                return true;
+            if(received[i].getItem() == item.getItem())
+            {
+                int freeSlots = (received[i].getMaxStackSize() - received[i].stackSize);
+                if(freeSlots > 0)
+                    availSlots = availSlots + freeSlots;
+            }
+        }
+        return item.stackSize <= availSlots;
+    }
+
     public void InitLedgerItems()
     {
         ArrayList<LedgerData> ledgerItems = new ArrayList<LedgerData>();
@@ -422,12 +503,44 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 
     public int GetCreditsForUser(String username)
     {
+        InitUserBalanceSheet(username);
+        return balanceSheet.get(username);
+    }
+
+    public int AddCreditsForUser(String username, int credits)
+    {
+        InitUserBalanceSheet(username);
+        balanceSheet.put(username, balanceSheet.get(username) + credits);
+        return balanceSheet.get(username);
+    }
+
+    public boolean HasEnoughCredits(String username, int credits)
+    {
+        InitUserBalanceSheet(username);
+        return balanceSheet.get(username) >= credits;
+    }
+
+    public int SubtractCreditsForUser(String username, int credits)
+    {
+        InitUserBalanceSheet(username);
+        if(HasEnoughCredits(username, credits))
+        {
+            balanceSheet.put(username, balanceSheet.get(username) - credits);
+        }
+        else
+        {
+            //Don't allow negative credits; this should never happen anyhow.
+            balanceSheet.put(username, 0);
+        }
+        return balanceSheet.get(username);
+    }
+
+    public void InitUserBalanceSheet(String username)
+    {
         if(!balanceSheet.containsKey(username))
         {
             balanceSheet.put(username, 0);
         }
-
-        return balanceSheet.get(username);
     }
 
     public ArrayList<LedgerData> GetLedgerData()
@@ -455,6 +568,24 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
     }
 
     public int getItemCost() { return itemCost; }
+
+    public int GetAvailableSaleItemCount()
+    {
+        int count = -1;
+        if(bHasSaleItem)
+        {
+            count = 0;
+            for(ItemStack item : inventory)
+            {
+                if(item != null && item.getItem() == tradedItem.getItem())
+                {
+                    count = count + item.stackSize;
+                }
+            }
+        }
+
+        return count;
+    }
 
     public void SendLedgerStatusPacket()
     {
