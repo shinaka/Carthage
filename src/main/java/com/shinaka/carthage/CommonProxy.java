@@ -25,5 +25,11 @@ public class CommonProxy
                 'S', Blocks.wooden_slab,
                 'T', Items.stick,
                 'W', Blocks.planks} );
+        GameRegistry.addRecipe(new ItemStack(Carthage.registerBlock), new Object[]{
+                "IGI","III","IPS",
+                'I', Items.iron_ingot,
+                'G', Blocks.glass,
+                'P', Blocks.planks,
+                'S', Items.stick});
     }
 }

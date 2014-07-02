@@ -165,11 +165,12 @@ public class TileEntityTradingPostBlock extends BlockContainer
             return 1;
         return 2;
     }
+    /*
     @Override
     public String getUnlocalizedName()
     {
         return "Trading Post";
-    }
+    }*/
 
     @Override
     public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z)

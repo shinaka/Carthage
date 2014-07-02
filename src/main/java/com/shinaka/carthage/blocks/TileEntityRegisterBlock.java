@@ -57,11 +57,13 @@ public class TileEntityRegisterBlock extends BlockContainer
         return false;
     }
 
+    /*
     @Override
     public String getUnlocalizedName()
     {
         return "Register";
     }
+    */
 
     @Override
     public void registerBlockIcons(IIconRegister icon)

@@ -22,17 +22,18 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import net.minecraft.item.Item;
 
-@Mod(modid = Carthage.MODID, version = Carthage.VERSION)
+@Mod(modid = Carthage.MODID, version = Carthage.VERSION, name = Carthage.NAME)
 public class Carthage {
     public static final String MODID = "carthage";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.7.2-1.0";
+    public static final String NAME = "Carthage";
     public static final PacketPipeline packetPipeline = new PacketPipeline();
     public static Carthage INSTANCE;
     public static Block tradingPostBlock;
     public static Block registerBlock;
     public static Item itemLedger;
 
-    @SidedProxy(clientSide = "com.shinaka.carthage.client.ClientProxy", serverSide = "com.shinaka.CommonProxy")
+    @SidedProxy(clientSide = "com.shinaka.carthage.client.ClientProxy", serverSide = "com.shinaka.carthage.CommonProxy")
     public static CommonProxy proxy;
 
     @EventHandler
@@ -41,11 +42,11 @@ public class Carthage {
         Carthage.INSTANCE = this;
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new CarthageGuiHandler());
         proxy.registerRenderers();
-        tradingPostBlock = new TileEntityTradingPostBlock();
+        tradingPostBlock = new TileEntityTradingPostBlock().setBlockName("Trading Post");
         GameRegistry.registerTileEntity(TileEntityTradingPost.class, "tileEntityTradingPost");
         GameRegistry.registerBlock(tradingPostBlock, TradingPostItemBlock.class, "Trading Post");
 
-        registerBlock = new TileEntityRegisterBlock();
+        registerBlock = new TileEntityRegisterBlock().setBlockName("Register");
         GameRegistry.registerTileEntity(TileEntityRegister.class, "tileEntityRegister");
         GameRegistry.registerBlock(registerBlock, "Register");
 
