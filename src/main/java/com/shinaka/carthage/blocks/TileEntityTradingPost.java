@@ -125,6 +125,7 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                     else if(slot == tradedItemSlotIdx)
                     {
                         tradedItem = ItemStack.loadItemStackFromNBT(tag);
+                        SetHasSaleItem(tradedItem != null);
                     }
                 }
             }
@@ -395,8 +396,9 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 
     public void RemoveSaleItemsByCount(int count)
     {
-        for(ItemStack item : inventory)
+        for(int i = 0; i < inventory.length; ++i)
         {
+            ItemStack item = inventory[i];
             if(item != null && item.getItem() == tradedItem.getItem())
             {
                 if(item.stackSize >= count)
@@ -404,13 +406,13 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
                     int toRemove = item.stackSize - count;
                     item.stackSize = toRemove;
                     if(item.stackSize == 0)
-                        item = null;
+                        inventory[i] = null;
                     return;
                 }
                 else
                 {
                     count = count - item.stackSize;
-                    item = null;
+                    inventory[i] = null;
                 }
             }
         }
@@ -550,6 +552,8 @@ public class TileEntityTradingPost extends TileEntity implements IInventory
 
     public ArrayList<ItemStack> GetLedgerItemsAsStack()
     {
+        if(ledgerData == null)
+            return null;
         ArrayList<ItemStack> returnList = new ArrayList<ItemStack>();
         for(LedgerData ld : ledgerData)
         {

@@ -52,24 +52,27 @@ public class GuiTradingPostUser extends CustomGuiContainer
 
         int itemHeight = 8;
         final int itemSpace = 18;
-        for(ItemStack item : ledgerItems)
+        if(ledgerItems != null)
         {
-            IIcon icon = item.getIconIndex();
-            ResourceLocation resourceLocation = texMgr.getResourceLocation(item.getItem().getSpriteNumber());
-            Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
+            for (ItemStack item : ledgerItems)
+            {
+                IIcon icon = item.getIconIndex();
+                ResourceLocation resourceLocation = texMgr.getResourceLocation(item.getItem().getSpriteNumber());
+                Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
 
-            this.drawTexturedModelRectFromIcon(getGuiLeft() + 135, getGuiTop() + itemHeight, icon, 16, 16);
+                this.drawTexturedModelRectFromIcon(getGuiLeft() + 135, getGuiTop() + itemHeight, icon, 16, 16);
 
-            itemHeight = itemHeight + itemSpace;
-        }
+                itemHeight = itemHeight + itemSpace;
+            }
 
-        //We can't draw text until after we've rendered these (or else the textures rendered after get dimmed
-        //So, we have to be a little sloppy.
-        itemHeight = 8;
-        for(ItemStack item : ledgerItems)
-        {
-            fontRenderer.drawString(Integer.toString(tePost.GetItemLedgerCost(item)), getGuiLeft() + 153, getGuiTop() + itemHeight + 4, 4210752);
-            itemHeight = itemHeight + itemSpace;
+            //We can't draw text until after we've rendered these (or else the textures rendered after get dimmed
+            //So, we have to be a little sloppy.
+            itemHeight = 8;
+            for (ItemStack item : ledgerItems)
+            {
+                fontRenderer.drawString(Integer.toString(tePost.GetItemLedgerCost(item)), getGuiLeft() + 153, getGuiTop() + itemHeight + 4, 4210752);
+                itemHeight = itemHeight + itemSpace;
+            }
         }
         /*
         //Draw available item slots

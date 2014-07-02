@@ -130,6 +130,7 @@ public class ContainerTradingPostUser extends Container
                     tePost.SubtractCreditsForUser(player.getDisplayName(), totalCost);
                     tePost.RemoveSaleItemsByCount(totalToPurchase);
                     player.inventory.addItemStackToInventory(stack.copy());
+                    return null;
                 }
             }
             else
