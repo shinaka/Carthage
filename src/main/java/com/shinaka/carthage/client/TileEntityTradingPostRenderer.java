@@ -68,7 +68,7 @@ public class TileEntityTradingPostRenderer extends TileEntitySpecialRenderer
         //GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glPushMatrix();
         GL11.glTranslated(0.03f, 0.50f, 0.375f );
-        if(itemList.size() > 0 && itemList.size() <= 4) {
+        if( itemList != null && itemList.size() > 0 && itemList.size() <= 4) {
             for (int i = 0; i < itemList.size(); ++i)
             {
                 if (itemList.get(i) == null)

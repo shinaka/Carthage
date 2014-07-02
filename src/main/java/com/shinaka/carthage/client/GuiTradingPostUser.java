@@ -90,9 +90,12 @@ public class GuiTradingPostUser extends CustomGuiContainer
         fontRenderer.drawString("Sell", getGuiLeft() + 11, getGuiTop() + 7, 4210752);
         fontRenderer.drawString("Buy", getGuiLeft() + 11, getGuiTop() + 52, 4210752);
 
-        fontRenderer.drawString("Available Credits", getGuiLeft() + 42, getGuiTop() + 27, 4210752);
+        fontRenderer.drawString("Available Credits", getGuiLeft() + 42, getGuiTop() + 12, 4210752);
 
         //Player's Credit Count
-        fontRenderer.drawString(Integer.toString(tePost.GetCreditsForUser(player.getDisplayName())), getGuiLeft() + 74, getGuiTop() + 42, 4210752);
+        fontRenderer.drawString(Integer.toString(tePost.GetCreditsForUser(player.getDisplayName())), getGuiLeft() + 74, getGuiTop() + 27, 4210752);
+
+        fontRenderer.drawString("Available Stock", getGuiLeft() + 42, getGuiTop() + 57, 4210752);
+        fontRenderer.drawString(Integer.toString(tePost.GetAvailableSaleItemCount()), getGuiLeft() + 74, getGuiTop() + 72, 4210752);
     }
 }

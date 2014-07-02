@@ -109,7 +109,7 @@ public class ContainerTradingPostUser extends Container
         }
         else if(slot == 1)
         {
-            if(player.inventory.getItemStack() == null && tePost.GetHasSaleItem())
+            if(player.inventory.getItemStack() == null && tePost.GetHasSaleItem() && tePost.GetAvailableSaleItemCount() > 0)
             {
                 //Can the player afford at least one?
                 if(tePost.HasEnoughCredits(player.getDisplayName(), tePost.getItemCost()))
@@ -129,14 +129,12 @@ public class ContainerTradingPostUser extends Container
 
                     tePost.SubtractCreditsForUser(player.getDisplayName(), totalCost);
                     tePost.RemoveSaleItemsByCount(totalToPurchase);
-                    player.inventory.addItemStackToInventory(stack.copy());
-                    return null;
+                    //player.inventory.addItemStackToInventory(stack.copy());
+                    player.inventory.setItemStack(stack.copy());
                 }
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
         return super.slotClick(slot, par2, par3, player);
     }
