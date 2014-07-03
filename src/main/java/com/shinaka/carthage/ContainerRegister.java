@@ -65,7 +65,7 @@ public class ContainerRegister extends Container
             case TileEntityRegister.slot2idx:
             case TileEntityRegister.slot3idx:
             case TileEntityRegister.slot4idx:
-                if(player.inventory.getItemStack() != null && IsItemStackUnused(player.inventory.getItemStack().getItem()))
+                if(player.inventory.getItemStack() != null && IsItemStackUnused(player.inventory.getItemStack()))
                 {
                     ItemStack mouseItem = player.inventory.getItemStack();
                     ItemStack clonedItem = mouseItem.copy();
@@ -110,22 +110,30 @@ public class ContainerRegister extends Container
         return null;
     }
 
-    private boolean IsItemStackUnused(Item testItem)
+    private boolean IsItemStackUnused(ItemStack testItem)
     {
         //Item testItem = getSlot(slot).getStack().getItem();
-        ArrayList<Item> itemList = AddSlotsToArrayList();
-        if(itemList.contains(testItem))
-            return false;
+        ArrayList<ItemStack> itemList = AddSlotsToArrayList();
+        for(int i = 0; i < itemList.size(); ++i)
+        {
+            if(itemList.get(i) != null && itemList.get(i).getItem() == testItem.getItem())
+            {
+                ItemStack stack = itemList.get(i);
+                if(stack.getItemDamage() == testItem.getItemDamage())
+                    return false;
+            }
+        }
+
         return true;
     }
 
-    private ArrayList<Item> AddSlotsToArrayList()
+    private ArrayList<ItemStack> AddSlotsToArrayList()
     {
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
         for(int slot = 0; slot < 4; slot++)
         {
             if (getSlot(slot).getStack() != null && getSlot(slot).getStack().getItem() != null)
-                itemList.add(getSlot(slot).getStack().getItem());
+                itemList.add(getSlot(slot).getStack());
         }
         return itemList;
     }

@@ -68,6 +68,6 @@ public class TileEntityRegisterBlock extends BlockContainer
     @Override
     public void registerBlockIcons(IIconRegister icon)
     {
-        this.blockIcon = icon.registerIcon("carthage:Registericon");
+        this.blockIcon = icon.registerIcon("Carthage:Registericon");
     }
 }
